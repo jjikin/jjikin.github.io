@@ -719,6 +719,7 @@ $btn-mb: 0.5rem;
     width: 7rem;
     height: 7rem;
     overflow: hidden;
+    margin: auto;
     box-shadow: var(--avatar-border-color) 0 0 0 2px;
     transform: translateZ(0); /* fixed the zoom in Safari */
 
@@ -735,19 +736,19 @@ $btn-mb: 0.5rem;
     @include mt-mb(2.5rem);
     @extend %clickable-transition;
 
-    padding-left: 2.5rem;
-    padding-right: 1.25rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
     width: 100%;
   }
 
   .site-title {
-    font-weight: 900;
+    font-weight: 700;
+    padding-left: 0.2rem;
     font-size: 1.75rem;
     line-height: 1.2;
     letter-spacing: 0.25px;
     color: rgba(134, 133, 133, 0.99);
     margin-top: 1.25rem;
-    margin-bottom: 0.5rem;
 
     a {
       @extend %clickable-transition;
@@ -758,7 +759,6 @@ $btn-mb: 0.5rem;
   .site-subtitle {
     font-size: 95%;
     color: var(--sidebar-muted-color);
-    margin-top: 0.25rem;
     word-spacing: 1px;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -766,6 +766,14 @@ $btn-mb: 0.5rem;
     user-select: none;
   }
 
+  .site-subdescription {
+    margin-top: 0.5rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
   ul {
     margin-bottom: 2rem;
 
@@ -1552,8 +1560,6 @@ $btn-mb: 0.5rem;
     $icon-gap: 1rem; // for the bottom icons
 
     .profile-wrapper {
-      margin-top: 3.5rem;
-      margin-bottom: 2.5rem;
       padding-left: 3.5rem;
     }
 
