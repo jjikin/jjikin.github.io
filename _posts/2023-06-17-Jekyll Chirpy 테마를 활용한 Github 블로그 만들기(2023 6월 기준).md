@@ -4,6 +4,11 @@ date: 2023-06-17 20:34:39 +09:00
 categories: [Git, Github Blog]
 tags: [git, github, jekyll, blog]
 img_path: ../
+image: ../assets/img/posts/image-20230618154229292.png
+# ------------------------------------------------------------------
+# 포스트 작성 시 참고 URL
+# https://chirpy.cotes.page/posts/write-a-new-post/
+# https://chirpy.cotes.page/posts/text-and-typography/
 ---
 
 기존 [oopy](https://www.oopy.io/)라는 노션 기반 웹사이트를 통해 블로그를 운영하고 있었는데, 5/25 비용 인상으로 대체제를 찾던 중 Github Pages로 이관하기로 결정했습니다.

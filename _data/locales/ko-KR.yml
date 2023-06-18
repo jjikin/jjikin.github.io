@@ -3,9 +3,9 @@
 # ----- Commons label -----
 
 layout:
-  post: 포스트
-  category: 카테고리
-  tag: 태그
+  post: Post
+  category: Category
+  tag: Tag
 
 # The tabs of sidebar
 tabs:
@@ -23,14 +23,14 @@ search:
   no_results: 검색 결과가 없습니다.
 
 panel:
-  lastmod: 최근 업데이트
-  trending_tags: 인기 태그
-  toc: 바로가기
+  lastmod: Recently Post
+  trending_tags: Trending Tags
+  toc: Contents
 
 copyright:
   # Shown at the bottom of the post
   license:
-    template: 이 기사는 저작권자의 :LICENSE_NAME 라이센스를 따릅니다.
+    template: 
     name: CC BY 4.0
     link: https://creativecommons.org/licenses/by/4.0/
 
@@ -53,15 +53,15 @@ notification:
 
 post:
   written_by: By
-  posted: 게시
-  updated: 업데이트
-  words: 단어
-  pageview_measure: 조회
+  posted: Posted
+  updated: Updated
+  words: words
+  pageview_measure: views
   read_time:
-    unit: 분
-    prompt: 읽는 시간
+    unit: min
+    prompt: read
   relate_posts: 관련된 글
-  share: 공유하기
+  share: 공유하기ㅤ
   button:
     next: 다음 글
     previous: 이전 글
@@ -80,5 +80,9 @@ df:
 
 # categories page
 categories:
-  category_measure: 카테고리
-  post_measure: 포스트
+  category_measure:
+    singular: category
+    plural: categories
+  post_measure:
+    singular: post
+    plural: posts
