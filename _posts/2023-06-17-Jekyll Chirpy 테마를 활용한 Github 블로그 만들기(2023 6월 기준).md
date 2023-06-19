@@ -213,15 +213,12 @@ Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점�
 
 ## 마무리
 
-루비 버전 때문에 정말 삽질을 많이 했다. Jekyll이 루비 기반으로 만들어진 엔진인데 이 부분을 간과했었다.
-
 이외에도 많은 분들이 사용하는 테마인만큼 커스터마이징과 이슈 해결을 위한 구글링이 매우 수월했습니다.
 
-Chirpy 예제 사이트에서 설치 및 md 작성 방법과 Favicon 등에 대한 소개 페이지를 확인 가능합니다.
-https://chirpy.cotes.page/
+Chirpy 예제 사이트에서 설치 및 md 작성 방법과 Favicon 등에 대한 [소개 페이지](https://chirpy.cotes.page/)를 확인 가능합니다.
 
-또한 에러 발생 시, Github 내 Issue 검색을 통해 트러블슈팅하면 왠만한 에러들은 해결 가능했습니다.
-https://github.com/cotes2020/jekyll-theme-chirpy/issues
+또한 에러 발생 시, [Github 내 Issue](https://github.com/cotes2020/jekyll-theme-chirpy/issues) 검색을 통해 트러블슈팅하면 대부분 에러들은 해결 가능했습니다.
+
 
 
 

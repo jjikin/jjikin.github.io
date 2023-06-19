@@ -11,22 +11,76 @@ image: ../assets/img/posts/image-20230618154229292.png
 # https://chirpy.cotes.page/posts/text-and-typography/
 ---
 
-기존 [oopy](https://www.oopy.io/)라는 노션 기반 웹사이트를 통해 블로그를 운영하고 있었는데, 5/25 비용 인상으로 대체제를 찾던 중 Github Pages로 이관하기로 결정했습니다.
+devops 스터디를 위한 EKS 환경을 terraform을 통해 구축합니다.
 
-이전에도 Github Page를 통한 블로깅을 시도했으나 까다로운 설치와 커스터마이징으로 포기했었기 때문에, 테마 선택 시 사용자 수가 많고 커스터마이징 및 사용 사례 또한 많은 테마인 [Chipy](https://github.com/cotes2020/jekyll-theme-chirpy)를 선택했습니다.
+테라폼 관련 github 커뮤니티에서 AWS 리소스를 생성할 때 필요한 테라폼 코드를 모듈화하여 제공([terraform-aws-modules](https://github.com/terraform-aws-modules))하고 있어, 
+이를 활용하면 직접 코드를 작성하는 것 보다 간편하고 빠르게 리소스를 생성할 수 있습니다.
 
-하지만 이번에도 역시 설치과정에서 수많은 오류와 이슈들을 겪었지만...  
-어느정도 완성되어 2023년 6월 현재 테마 버전 v6.0.1 기준 설치 방법과 설치 간 겪었던 문제들을 정리해보았습니다.  
-
-  
-
-  
+ 
 
 
 
-## 설치 방법
+## Terraform Code
 
-### Local 설치
+### VPC.tf
+
+여러 어카운트 간 리소스 연동이 필요하므로, 모든 리소스는 퍼블릭 영역에 생성합니다.
+
+```json
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+
+  name = "devops-vpc"
+  cidr = "192.168.0.0/16"
+
+  azs              = ["us-east-1a", "us-east-1c"]
+  public_subnets   = ["192.168.0.0/20", "192.168.16.0/20"]
+  # private_subnets  = ["192.168.32.0/20", "192.168.48.0/20"]
+
+  public_subnet_names = ["devops-pub-a-sn", "devops-pub-c-sn"]
+  # private_subnet_names = ["devops-pri-a-sn", "devops-pri-c-sn"]
+  public_subnet_tags = {
+    "kubernetes.io/role/elb" = 1  # 서브넷에 해당 주석을 달아주면, k8s 내에서 ingress 생성 시 서브넷 지정이 필요없음
+  }
+  enable_nat_gateway = false
+  enable_dns_hostnames = true
+  enable_dns_support = true
+  map_public_ip_on_launch = true  # 퍼블릭 서브넷 내 생성되는 리소스에 자동으로 퍼블릭 IP를 할당한다.
+
+  tags = {
+    CreatedBy = "Terraform"
+  }
+}
+
+output "vpc_id" {
+  description = "The ID of the VPC"
+  value       = module.vpc.vpc_id
+}
+
+output "private_subnets" {
+  description = "List of IDs of private subnets"
+  value       = module.vpc.private_subnets
+}
+```
+
+
+
+참고 사이트
+
+- https://github.com/terraform-aws-modules/terraform-aws-vpc
+- https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
+
+
+
+
+
+
+
+
+
+
+
+
 
 Chirpy 테마 설치 [방법](https://chirpy.cotes.page/posts/getting-started/)에는 Chirpy Starter와 GitHub Fork 방식이 존재합니다.
 Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점이 있지만 커스터마이징이 제한적입니다.<br>따라서 이 포스트에서는 GitHub Fork 방식을 통해 설치합니다.    
