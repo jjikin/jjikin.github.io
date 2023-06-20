@@ -203,11 +203,15 @@ Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점�
 
 ## 마무리
 
-많은 유저가 사용하는 테마인만큼 커스터마이징과 이슈 해결을 위한 구글링이 매우 수월했습니다.
+많은 유저가 사용하는 테마인만큼 커스터마이징과 이슈 해결을 위한 사례가 많아 트러블슈팅이 매우 수월했습니다.  
+또한 에러 발생 시, [Github 내 Issue](https://github.com/cotes2020/jekyll-theme-chirpy/issues) 검색을 통해 트러블슈팅하면 대부분 에러들은 해결 가능했습니다.
 
 Chirpy 예제 사이트에서 설치 및 md 작성 방법과 Favicon 등에 대한 [소개 페이지](https://chirpy.cotes.page/)를 확인 가능합니다.
 
-또한 에러 발생 시, [Github 내 Issue](https://github.com/cotes2020/jekyll-theme-chirpy/issues) 검색을 통해 트러블슈팅하면 대부분 에러들은 해결 가능했습니다.
+{: .prompt-info }
+
+> 프론트엔드 지식은 기초적인 수준이라 포스트 내용에 틀린 부분이 있을 수 있습니다.  
+> 댓글 달아주시면 확인 후 수정하도록 하겠습니다.
 
 <br>
 

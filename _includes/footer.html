@@ -3,9 +3,9 @@
 <footer>
   <div class="container px-lg-4">
     <div class="d-flex justify-content-left align-items-center text-muted mx-md-3">
-        {{ '©' }}
-        {{ 'now' | date: '%Y' }}
-        {{ site.social.name }}
+      <span>{{ '©' }}</span>
+      <span>{{ 'now' | date: '%Y' }}</span>
+      <span>{{ site.social.name }}</span>
         {% if site.data.locales[include.lang].copyright.brief %}
           <span
             data-bs-toggle="tooltip"
