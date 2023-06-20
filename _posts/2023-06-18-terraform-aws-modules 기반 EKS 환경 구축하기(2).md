@@ -5,7 +5,7 @@ categories: [devops-study, eks]
 tags: [aws, eks, kubenetes, k8s, terraform, iac, module]
 image: /assets/img/posts/image-20230619231723025.png
 # ------------------------------------------------------------------
-# 포스트 작성 시 참고 URL
+# 포스트 작성 시 참고 URL 
 # https://chirpy.cotes.page/posts/write-a-new-post/
 # https://chirpy.cotes.page/posts/text-and-typography/
 ---
