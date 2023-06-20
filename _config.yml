@@ -18,7 +18,9 @@ timezone: Asia/Seoul
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: jjikin
+title: JJIKIN Tech Blog
+
+sidebar_title: JJIKIN
 
 tagline: Cloud Enginner 
 
