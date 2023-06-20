@@ -125,7 +125,7 @@ Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점�
 
    <br>
 
-4. 기존 배포 방식(Deploy form a branch)에 사용되던 파일(pages-deploy.yml.hook)을 삭제합니다.
+4. .gihub > workflow 디렉토리 내에서 기존 배포 방식(Deploy form a branch)에 사용되던 파일을 삭제합니다.
 
    ![image-20230618140237706](../assets/img/posts/image-20230618140237706.png)
 

@@ -188,8 +188,7 @@ EKS 버전은 2023.06 기준 최신 버전인 v1.27으로 설정했으며, 편�
 
 k8s 내부 통신을 위한 컴포넌트(kubenet, kube-proxy, coredns)는 EKS에서 기본적으로 제공하는 Add-on으로 구성하고 이외 컴포넌트(loadbalancer-controller, external-dns)는 Helm을 통해 설치합니다.
 
-EKS에서 k8s 내 리소스에 접근할 수 있는 권한을 부여하기 위해 configmap(aws-auth)을 자동으로 생성하도록 정의하고,  
-반대의 경우 AWS에서 제공하는 OIDC Provider를 구성, IRSA를 사용하여 k8s 내 Pod에 IAM Role을 할당합니다.
+EKS에서 k8s 내 리소스에 접근할 수 있는 권한을 부여하기 위해 configmap(aws-auth)을 자동으로 생성하도록 정의하고, 반대의 경우 AWS에서 제공하는 OIDC Provider를 구성, IRSA를 사용하여 k8s 내 Pod에 IAM Role을 할당합니다.
 
 내부 서비스는 ALB를 통해 제공합니다.  
 k8s Ingress와 ALB 연동을 위해 loadbalancer-controller 컴포넌트를 설치 및 구성하고, HTTPS 통신을 위해 별도의 인증서 생성하여 적용했습니다.
