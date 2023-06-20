@@ -3,8 +3,8 @@ title: terraform-aws-modules 기반 EKS 환경 구축하기(2)
 date: 2023-06-18 00:00:00 +09:00
 categories: [devops-study, eks]
 tags: [aws, eks, kubenetes, k8s, terraform, iac, module]
-img_path: ../
-image: ../assets/img/posts/image-20230619231723025.png
+img_path: /
+image: /assets/img/posts/image-20230619231723025.png
 # ------------------------------------------------------------------
 # 포스트 작성 시 참고 URL
 # https://chirpy.cotes.page/posts/write-a-new-post/
@@ -62,7 +62,7 @@ image: ../assets/img/posts/image-20230619231723025.png
 
   - 원인  
     EKS Console에서 vpc-cni Add-on 로그(aws-node-* pod) 로그 확인 시 아래와 같이 권한 에러가 확인됨
-    ![image-20230619222350757](../assets/img/posts/image-20230619222350757.png)
+    ![image-20230619222350757](/assets/img/posts/image-20230619222350757.png)
     
     특정 권한이 vpc-cni IRSA Role([devops-eks-vpc-cni-irsa-role](https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-1#/roles/details/devops-eks-vpc-cni-irsa-role))에 부여되지 않아 발생하는 권한 문제로 추측
     
@@ -77,7 +77,7 @@ image: ../assets/img/posts/image-20230619231723025.png
     vpc_cni_enable_ipv4   = true
   ```
     <br>terraform plan 시 아래와 같이 IP 할당과 관련된 권한이 추가됨을 확인
-    ![image-20230619223111113](../assets/img/posts/image-20230619223111113.png)
+    ![image-20230619223111113](/assets/img/posts/image-20230619223111113.png)
 
 <br>
 
@@ -104,7 +104,7 @@ image: ../assets/img/posts/image-20230619231723025.png
   
   - 해결  
     [링크]( https://github.com/aws/aws-cli/issues/6920 )와 같이 버전 호환 이슈가 있어 1.23.6으로 다운그레이드 후 API 정상 호출 확인
-    ![image-20230619224629361](../assets/img/posts/image-20230619224629361.png)
+    ![image-20230619224629361](/assets/img/posts/image-20230619224629361.png)
 
 <br>
 

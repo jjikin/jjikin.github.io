@@ -3,8 +3,8 @@ title: terraform-aws-modules 기반 EKS 환경 구축하기(1)
 date: 2023-06-17 00:00:00 +09:00
 categories: [devops-study, eks]
 tags: [aws, eks, kubenetes, k8s, terraform, iac, module]
-img_path: ../
-image: ../assets/img/posts/image-20230619231723025.png
+img_path: /
+image: /assets/img/posts/image-20230619231723025.png
 # ------------------------------------------------------------------
 # 포스트 작성 시 참고 URL
 # https://chirpy.cotes.page/posts/write-a-new-post/
@@ -522,7 +522,7 @@ resource "helm_release" "external_dns" {
 
 ## 내부 서비스(Sockshop)
 
-![image-20230619182858040](../assets/img/posts/image-20230619182858040.png)
+![image-20230619182858040](/assets/img/posts/image-20230619182858040.png)
 
 EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마이크로서비스 데모 애플리케이션인 [Sockshop](https://microservices-demo.github.io/)을 사용했습니다.
 
