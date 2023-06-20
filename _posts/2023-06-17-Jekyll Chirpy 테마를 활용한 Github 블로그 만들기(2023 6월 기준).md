@@ -183,8 +183,6 @@ Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점�
    git push
    ```
 
-   ![image-20230618023030988](../assets/img/posts/image-20230618023030988.png)
-
    ![image-20230618022538483](../assets/img/posts/image-20230618022538483.png)
 
    <br>
