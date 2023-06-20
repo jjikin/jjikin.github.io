@@ -1,0 +1,171 @@
+{
+  "main": {
+    "id": "3c5155da79d38dbd",
+    "type": "split",
+    "children": [
+      {
+        "id": "391f312db98c0196",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b09c7f155c34a9d1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "2023-06-13-terraform-aws-modules 기반 EKS 환경 구축하기(2).md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "9b9bd85c002e7443",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f88553b606855033",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "2023-06-12-terraform-aws-modules 기반 EKS 환경 구축하기(1).md",
+                "mode": "preview",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "1a9b5721e53b2974",
+    "type": "split",
+    "children": [
+      {
+        "id": "a79da83d541a1193",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a5f461cdad0b6f0e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "b142b97678d5eb61",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "d438515dca3ba385",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 228.5
+  },
+  "right": {
+    "id": "b14f5defb8a67230",
+    "type": "split",
+    "children": [
+      {
+        "id": "90ff15ef7b9a9be7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "036cd233db52db4a",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "2023-06-13-terraform-aws-modules 기반 EKS 환경 구축하기(2).md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "503b4a0f3407ea60",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "2023-06-13-terraform-aws-modules 기반 EKS 환경 구축하기(2).md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "a888fa14ab22853e",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "48275a3ab47d6e78",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "2023-06-13-terraform-aws-modules 기반 EKS 환경 구축하기(2).md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:퀵 스위처 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "daily-notes:오늘의 데일리 노트 열기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false
+    }
+  },
+  "active": "b09c7f155c34a9d1",
+  "lastOpenFiles": [
+    "2023-06-12-terraform-aws-modules 기반 EKS 환경 구축하기(1).md"
+  ]
+}
