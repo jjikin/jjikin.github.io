@@ -581,9 +581,9 @@ EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마�
 
 2. infra 디렉토리에서 `eks.tf`를 다른 곳으로 임시 이동시켜 제외한 후  `terraform init`  및 `terraform apply `  실행
 
-   {: .prompt-danger }
+   {: .prompt-info }
 
-   > 초기 상태 파일의 경우 빈(empty) 파일이므로 eks.tf에서 사용하는 data source를 사용할 수 없기 때문입니다.
+   > 초기 상태 파일의 경우 빈(empty) 파일이므로 eks 리소스 생성 시, data source를 이용해 vpc 리소스 정보를 가져올 수 없기 때문입니다.
 
 3. `eks.tf`를 다시 infra 디렉토리로 원복한 후  `terraform init`  및 `terraform apply `  실행
 
