@@ -3,8 +3,8 @@ title: Jekyll Chirpy(v6.0.1) 테마를 활용한 Github 블로그 만들기(2023
 date: 2023-06-11 00:00:00 +09:00
 categories: [Git, Github Blog]
 tags: [git, github, jekyll, blog]
-img_path: ../
-image: ../assets/img/posts/image-20230618154229292.png
+img_path: /
+image: /assets/img/posts/image-20230618154229292.png
 # ------------------------------------------------------------------
 # 포스트 작성 시 참고 URL
 # https://chirpy.cotes.page/posts/write-a-new-post/
@@ -30,13 +30,13 @@ Chirpy 테마 설치 [방법](https://chirpy.cotes.page/posts/getting-started/)�
 Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점이 있지만 커스터마이징이 제한적입니다.<br>따라서 이 포스트에서는 GitHub Fork 방식을 통해 설치합니다.    
 
 1. [링크](https://github.com/cotes2020/jekyll-theme-chirpy/fork)를 통해 Repository를 Fork 합니다.<br>Repository name은 반드시 [github ID].github.io 형식으로 생성해야하며, 설정 후 Create Fork를 선택합니다.
-   ![image-20230617194703359](../assets/img/posts/image-20230617194703359.png)
+   ![image-20230617194703359](/assets/img/posts/image-20230617194703359.png)
 
    <br>
 
 2. branch를 master에서 main으로 변경하고 Branch protection rule도 기본값(체크 X)으로 설정합니다.
-   ![image-20230617201648065](../assets/img/posts/image-20230617201648065.png)
-   ![image-20230621024536519](../assets/img/posts/image-20230621024536519.png)
+   ![image-20230617201648065](/assets/img/posts/image-20230617201648065.png)
+   ![image-20230621024536519](/assets/img/posts/image-20230621024536519.png)
    
    <br>
 
@@ -46,7 +46,7 @@ Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점�
    $ git clone https://github.com/jjikin/jjikin.github.io.git
    ```
 
-   ![image-20230617194724936](../assets/img/posts/image-20230617194724936.png)
+   ![image-20230617194724936](/assets/img/posts/image-20230617194724936.png)
 
    <br>
 
@@ -57,7 +57,7 @@ Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점�
    $ bundle
    ```
 
-   ![image-20230617202547940](../assets/img/posts/image-20230617202547940.png)
+   ![image-20230617202547940](/assets/img/posts/image-20230617202547940.png)
 
    {: .prompt-warning }
 
@@ -83,13 +83,13 @@ Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점�
    jekyll serve
    ```
 
-   ![image-20230617202606906](../assets/img/posts/image-20230617202606906.png)
+   ![image-20230617202606906](/assets/img/posts/image-20230617202606906.png)
 
    <br>
 
 7. 웹브라우저에서 127.0.0.1:4000 주소로 블로그가 정상적으로 표시되는지 확인하고 블로그 내 여러 메뉴 및 기능들도 정상 동작하는지 확인합니다. 
 
-![image-20230617202644391](../assets/img/posts/image-20230617202644391.png)
+![image-20230617202644391](/assets/img/posts/image-20230617202644391.png)
 
  <br>
 
@@ -101,33 +101,33 @@ Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점�
 
 1. 배포 전 아래와 같이 Settings - Pages - Build and deployment 에서 소스를 GitHub Actions로 변경합니다.
 
-   ![image-20230617202846583](../assets/img/posts/image-20230617202846583.png)
+   ![image-20230617202846583](/assets/img/posts/image-20230617202846583.png)
 
    <br>
 
 2. Configure를 선택합니다.
 
-   ![image-20230617203012976](../assets/img/posts/image-20230617203012976.png)
+   ![image-20230617203012976](/assets/img/posts/image-20230617203012976.png)
 
    <br>
 
 3. 별도의 수정 없이 Commit changes...를 선택 후 Commit changes 선택합니다.
 
-   ![image-20230617203158302](../assets/img/posts/image-20230617203158302.png)
+   ![image-20230617203158302](/assets/img/posts/image-20230617203158302.png)
 
-   ![image-20230617203223507](../assets/img/posts/image-20230617203223507.png)
+   ![image-20230617203223507](/assets/img/posts/image-20230617203223507.png)
 
    {: .prompt-warning }
 
    > GitHub Actions로 소스를 변경하지 않거나, Configure를 완료하지 않고 배포할 경우 아래와 같이 index.html 화면만 표시되니 주의합니다.
 
-   ![image-20230617203510587](../assets/img/posts/image-20230617203510587.png)
+   ![image-20230617203510587](/assets/img/posts/image-20230617203510587.png)
 
    <br>
 
 4. .gihub > workflow 디렉토리 내에서 기존 배포 방식(Deploy form a branch)에 사용되던 파일을 삭제합니다.
 
-   ![image-20230618140237706](../assets/img/posts/image-20230618140237706.png)
+   ![image-20230618140237706](/assets/img/posts/image-20230618140237706.png)
 
    <br>
 
@@ -138,7 +138,7 @@ Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점�
    git pull
    ```
 
-   ![image-20230617204557101](../assets/img/posts/image-20230617204557101.png)
+   ![image-20230617204557101](/assets/img/posts/image-20230617204557101.png)
 
    <br>
 
@@ -183,19 +183,19 @@ Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점�
    git push
    ```
 
-   ![image-20230618022538483](../assets/img/posts/image-20230618022538483.png)
+   ![image-20230618022538483](/assets/img/posts/image-20230618022538483.png)
 
    <br>
 
 8. Github - Actions 탭에서 배포 워크플로우 실행을 확인할 수 있습니다.
 
-   ![image-20230618021752649](../assets/img/posts/image-20230618021752649.png)
+   ![image-20230618021752649](/assets/img/posts/image-20230618021752649.png)
 
    <br>
 
 9. 테스트 페이지 및 블로그 기능이 정상 동작하는지 확인합니다.
 
-   ![image-20230621030249710](../assets/img/posts/image-20230621030249710.png)
+   ![image-20230621030249710](/assets/img/posts/image-20230621030249710.png)
 
 <br>
 
