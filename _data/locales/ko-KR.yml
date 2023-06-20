@@ -35,7 +35,7 @@ copyright:
     link:
 
   # Displayed in the footer
-  brief: ㅤAll rights reserved.
+  brief:  All rights reserved.
   verbose: >-
     명시되지 않는 한 이 사이트의 블로그 게시물은 작성자의
     Creative Commons Attribution 4.0 International(CC BY 4.0) 라이선스에 따라 사용이 허가되었습니다.
@@ -61,7 +61,7 @@ post:
     unit: min
     prompt: read
   relate_posts: 관련 포스트
-  share: Share
+  share: 공유하기
   button:
     next: 다음 포스트
     previous: 이전 포스트
