@@ -3,7 +3,6 @@ title: Jekyll Chirpy(v6.0.1) 테마를 활용한 Github 블로그 만들기(2023
 date: 2023-06-11 00:00:00 +09:00
 categories: [Git, Github Blog]
 tags: [git, github, jekyll, blog]
-img_path: /
 image: /assets/img/posts/image-20230618154229292.png
 # ------------------------------------------------------------------
 # 포스트 작성 시 참고 URL
