@@ -21,9 +21,9 @@ Devops 스터디를 위한 EKS 환경을 Terraform을 통해 구축합니다.
 README.md와 Repository 내 example 디렉토리 내 코드를 참고하여 리소스 생성에 필요한 `Input`을 입력하면,  
 리소스를 포함하여  `Output` 까지 자동으로 생성해주므로 별도로 정의할 필요가 없습니다.
 
+<br>
 
-
-
+<br>
 
 ## Terraform Code
 
@@ -38,14 +38,15 @@ devops-study
     │   └── init.tf
     ├── infra
     │   ├── main.tf
-    │   └── vpc.tf
+    │   ├── vpc.tf
+    │   └── eks.tf
     └── service
         ├── depoly
         │   └── kubernetes
         ├── ...
 ```
 
-
+<br>
 
 ### init.tf
 
@@ -104,7 +105,7 @@ module "dynamodb_table" {
 
 </details>
 
-
+<br>
 
 ### main.tf
 
@@ -142,7 +143,7 @@ provider "aws" {
 
 </details>
 
-
+<br>
 
 ### vpc.tf
 
@@ -179,7 +180,7 @@ module "vpc" {
 
 </details>
 
-
+<br>
 
 ### eks.tf
 
@@ -518,7 +519,7 @@ resource "helm_release" "external_dns" {
 ```
 </details>
 
-
+<br>
 
 ## 내부 서비스(Sockshop)
 
@@ -541,6 +542,7 @@ EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마�
     ```
 
   - Ingress 설정
+    
     ```yaml
     apiVersion: networking.k8s.io/v1
     kind: Ingress
@@ -566,26 +568,27 @@ EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마�
               service:
                 name: front-end
                 port:
-                  number: 80
+                  number: 80<br>
     ```
     
-    
 
+<br>
 
+<br>
 
 ## 구성 방법
 
 ### 인프라 생성
 
-1. backend 디렉토리에서 `terraform init`  및 `terraform apply `  실행
+1. backend 디렉토리에서 `terraform init`  및 `terraform apply`  실행
 
-2. infra 디렉토리에서 `eks.tf`를 다른 곳으로 임시 이동시켜 제외한 후  `terraform init`  및 `terraform apply `  실행
+2. infra 디렉토리에서 `eks.tf`를 다른 곳으로 임시 이동시켜 제외한 후  `terraform init`  및 `terraform apply`  실행
 
    {: .prompt-info }
 
-   > 초기 상태 파일의 경우 빈(empty) 파일이므로 eks 리소스 생성 시, data source를 이용해 vpc 리소스 정보를 가져올 수 없기 때문입니다.
+   > 초기 상태 파일의 경우 빈(empty) 파일이므로 data source가 포함된 `eks.tf`를 같이 생성하면 vpc 리소스 정보를 가져올 수 없기 때문입니다.
 
-3. `eks.tf`를 다시 infra 디렉토리로 원복한 후  `terraform init`  및 `terraform apply `  실행
+3. `eks.tf`를 다시 infra 디렉토리로 원복한 후  `terraform init`  및 `terraform apply`  실행
 
 
 

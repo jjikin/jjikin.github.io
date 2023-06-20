@@ -18,7 +18,7 @@ image: ../assets/img/posts/image-20230619231723025.png
 - module 사용법 파악 및 기본 설정으로 EKS 구축
 - 코드 분석 및 리소스 커스터마이징(이름, 설정 등)
 - Sockshop 어플리케이션 배포하기
-- 기존 Service(nodeport) 환경을 ALB Ingress로 전환
+- 기존 Service(nodeport) 환경을 ALB + Ingress로 전환
 - ALB TLS 적용 및 리다이렉트 설정
 - externaldns + Route53을 활용하여 도메인 적용
 - 상태파일 저장을 위한 원격 Backend 구성
@@ -37,7 +37,7 @@ image: ../assets/img/posts/image-20230619231723025.png
 
   > Error: waiting for EKS Node Group (devops-eks-cluster:devops-eks-app-ng) to create: unexpected state 'CREATE_FAILED', wanted target 'ACTIVE'. last error: 1 error occurred:
   >
-  > │* subnet-0d5c59c7636cc4ae5, subnet-0fbd28806095278e5: Ec2SubnetInvalidConfiguration: One or more Amazon EC2 Subnets of [subnet-0d5c59c7636cc4ae5, subnet-0fbd28806095278e5] for node group devops-eks-app-ng does not automatically assign public IP addresses to instances launched into it. If you want your instances to be assigned a public IP address, then you need to enable auto-assign public IP address for the subnet. See IP addressing in VPC 
+  > subnet-0d5c59c7636cc4ae5, subnet-0fbd28806095278e5: Ec2SubnetInvalidConfiguration: One or more Amazon EC2 Subnets of [subnet-0d5c59c7636cc4ae5, subnet-0fbd28806095278e5] for node group devops-eks-app-ng does not automatically assign public IP addresses to instances launched into it. If you want your instances to be assigned a public IP address, then you need to enable auto-assign public IP address for the subnet. See IP addressing in VPC 
 
   - 원인  
   퍼블릭 서브넷에 EKS를 구성하는 경우 서브넷 옵션 중 '퍼블릭 IPv4 주소 자동 할당' 설정을 Enabled 하지 않으면 리소스 할당에 실패함.
@@ -81,7 +81,7 @@ image: ../assets/img/posts/image-20230619231723025.png
 
 <br>
 
-- **kubectl 명령어 사용을 위해 EKS 클러스터 내 kubeconfig 업데이트 시 apiVersion 에러**
+- **kubectl 명령어 사용을 위해 EKS 클러스터 내 kubeconfig 업데이트 시 apiVersion 에러**  
   `aws eks update-kubeconfig --name devops-eks-cluster --profile ljyoon`
   
   {: .prompt-warning }
@@ -89,9 +89,9 @@ image: ../assets/img/posts/image-20230619231723025.png
   > error: exec plugin: invalid apiVersion "client.authentication.k8s.io/v1alpha1"
   
   - 원인  
-    내 Mac에 설치된 kubectl 버전과, EKS 내 kubectl 버전이 맞지 않아 발생하는 것으로 추측
+    Mac에 설치된 kubectl 버전과, EKS 내 kubectl 버전이 맞지 않아 발생하는 것으로 추측
   
-    Mac 내 설치된 kubectl 버전 확인 `kubectl version --client`
+    Mac kubectl 버전 확인 `kubectl version --client`
   
     {: .prompt-info }
   
@@ -103,7 +103,7 @@ image: ../assets/img/posts/image-20230619231723025.png
     
   
   - 해결  
-    [구글링]( https://github.com/aws/aws-cli/issues/6920 ) 시 버전 호환 이슈가 있어 1.23.6으로 다운그레이드 후 API 정상 호출 확인
+    [링크]( https://github.com/aws/aws-cli/issues/6920 )와 같이 버전 호환 이슈가 있어 1.23.6으로 다운그레이드 후 API 정상 호출 확인
     ![image-20230619224629361](../assets/img/posts/image-20230619224629361.png)
 
 <br>
@@ -118,15 +118,17 @@ image: ../assets/img/posts/image-20230619231723025.png
   kubectl apply -f complete-demo.yaml
   ```
 
-  Service Nodeport를 사용하도록 초기 설정되어있어 complete-demo.yaml 에서 Front-end 서비스 종류를 NodePort에서 LoadBalancer로 변경 후 재배포 진행
+  
 
-  k8s에서는 기본적으로 L4 로드밸런싱을 지원하므로 CLB로 생성(NLB로도 가능)
+- Front-end 서비스 타입
+
+  기본적으로 Nodeport로 설정되어 있으며 AWS LB를 사용해보기 위해 LoadBalancer로 변경했더니 기본적으로 CLB로 생성되었다.
 
 <br>
 
 <br>
 
-### 기존 Service(nodeport) 환경을 ALB Ingress로 전환
+### 기존 Service(nodeport) 환경을 ALB + Ingress로 전환
 
 - **Helm 최신 버전 설치 후 loadbalancer-controller 설치 시 apiVersion 에러**
 
@@ -156,12 +158,11 @@ image: ../assets/img/posts/image-20230619231723025.png
   > | aws-load-balancer-controller | 0/2   | 0          | 0         | 84s  |
 
   - 원인  
-    describe 시 별 로그가 기록되지 않았고, 파드가 실행되지 않아 파드 로그 확인 불가
+    describe 시 별다른 로그가 기록되지 않았고, 파드가 실행되지 않아 파드 로그 확인 불가  
     관련 리소스 체킹 중 k8s 내 loadbalancer-controller 관련 ServiceAccount가 생성되지 않았음
     
-    terraform-aws-modules/iam/.../iam-role-for-service-accounts-eks 모듈에서 생성하는 리소스 확인 시 SA Resource 정의가 없음(vpc-cni는 자동 생성된 것 같은데...)
-    
-    
+    [iam-role-for-service-accounts-eks](https://github.com/terraform-aws-modules/terraform-aws-iam/blob/master/modules/iam-role-for-service-accounts-eks/main.tf) 모듈에서 생성하는 리소스 확인 시 SA Resource 정의가 없음  
+    (vpc-cni는 자동 생성된 것 같은데...)
     
   - 해결  
   아래와 같이 수동으로 정의 후 배포하고, LB Controller 재설치 시 정상적으로 파드가 올라오는 것을 확인
@@ -183,7 +184,7 @@ image: ../assets/img/posts/image-20230619231723025.png
     depends_on = [module.load_balancer_controller_irsa_role]
   }
   ```
-  
+
   <br>
 
 - **terraform 코드로 loadbalancer-controller를 설치하기 위한 리소스 정의 후 apply 오류**
@@ -217,30 +218,29 @@ image: ../assets/img/posts/image-20230619231723025.png
 
   > Warning: Helm release "external-dns" was created but has a failed status. Use he 'helm' command to investigate the error, correct it, then run Terraform again.
   >
-  >   with helm_release.external_dns, on eks.tf line 248, in resource "helm_release" "external_dns":
+  >   with helm_release.external_dns, on eks.tf line 248, in resource "helm_release" "external_dns": 248: resource "helm_release" "external_dns" {...
   >
-  >   248: resource "helm_release" "external_dns" {
-
+  
   - 원인  
-    파드 로그 확인 시 EC2 Instance의 최대 파드 갯수가 초과(=eni에 부여할 수 있는 IP 갯수)되어 IP를 할당하지 못하고 파드가 pending 상태로 유지됨
-
+    externaldns 파드 로그 확인 시 EC2 Instance의 최대 파드 갯수가 초과(=eni에 부여할 수 있는 IP 갯수)되어 IP를 할당하지 못하고 파드가 pending 상태로 유지됨
+  
     ```shell
     Warning  FailedScheduling  3m36s (x2 over 8m42s)  default-scheduler  0/2 nodes are available: 2 Too many pods. preemption: 0/2 nodes are available: 2 No preemption victims found for incoming pod..
     ```
-
+  
     
-
+  
   - 해결  
     t3.small을 사용하고 있었는데,  [노드 당 할당가능한 IP 갯수](https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/using-eni.html#AvailableIpPerENI)는 최대 11개로 확인된다.
-
+  
     해결 방법엔 2가지가 있으며 모두 사용해보았다.
-
+  
     1) 인스턴스 타입 변경  
        t3.medium으로 변경한 후 앱 배포 시 정상 Route53 레코드 등록되었다.
-
+  
     2) [prefix assignment mode](https://aws.amazon.com/ko/blogs/containers/amazon-vpc-cni-increases-pods-per-node-limits/) 모드 적용  
-       추후 특정 서비스 파드가 app 노드에만 생성되도록 nodeselector 적용 예정으로 아래와 같이 prefix assignment mode 옵션 추가
-
+       추후 특정 서비스 파드가 app 노드에만 생성되도록 nodeselector 적용 예정으로 아래와 같이 vpc-cni 정의 부분에 prefix assignment mode 옵션을 추가한다.
+  
        ```hcl
        # eks.tf
          cluster_addons = {
@@ -256,9 +256,9 @@ image: ../assets/img/posts/image-20230619231723025.png
              })
            ...
        ```
-
+  
     <br>
-
+  
 - **참고 사이트**
   - [https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.5/guide/integrations/external_dns/](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.5/examples/echo_server/#optional-use-external-dns-to-create-a-dns-record)
   - [https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-policy](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-policy)
@@ -270,7 +270,7 @@ image: ../assets/img/posts/image-20230619231723025.png
 
 ### 상태파일 저장을 위한 원격 Backend 구성
 
-- **alb ingress 제거 시 route53 내 레코드가 삭제되지 않는 문제**
+- **ingress 제거 시 route53 내 레코드가 삭제되지 않는 문제**
 
   - 원인  
     externaldns 설치 시 설정 값 `policy = upsert-only`  에 의해 Route53 레코드가 삭제되지 않음
@@ -280,7 +280,7 @@ image: ../assets/img/posts/image-20230619231723025.png
     - `sync` : 레코드 삭제를 포함한 모든 레코드 관련 작업을 허용
     
   - 해결  
-    아래와 같이 정책 변경
+    아래와 같이 정책을 `sync`로 변경
   
     ```hcl
     # eks.tf
