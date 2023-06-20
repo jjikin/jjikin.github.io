@@ -187,33 +187,33 @@ Chirpy Starter의 경우 빠르게 구성하여 블로깅할 수 있는 장점�
 
    ![image-20230618022538483](../assets/img/posts/image-20230618022538483.png)
 
-   
+   <br>
 
 8. Github - Actions 탭에서 배포 워크플로우 실행을 확인할 수 있습니다.
 
    ![image-20230618021752649](../assets/img/posts/image-20230618021752649.png)
 
-   
+   <br>
 
-9. 테스트 페이지와 블로그 기능이 정상 동작하는지 확인합니다.
+9. 테스트 페이지 및 블로그 기능이 정상 동작하는지 확인합니다.
 
-![image-20230618024152318](../assets/img/posts/image-20230618024152318.png)
+   ![image-20230621030249710](../assets/img/posts/image-20230621030249710.png)
 
+<br>
 
-
-
+<br>
 
 ## 마무리
 
-이외에도 많은 분들이 사용하는 테마인만큼 커스터마이징과 이슈 해결을 위한 구글링이 매우 수월했습니다.
+많은 유저가 사용하는 테마인만큼 커스터마이징과 이슈 해결을 위한 구글링이 매우 수월했습니다.
 
 Chirpy 예제 사이트에서 설치 및 md 작성 방법과 Favicon 등에 대한 [소개 페이지](https://chirpy.cotes.page/)를 확인 가능합니다.
 
 또한 에러 발생 시, [Github 내 Issue](https://github.com/cotes2020/jekyll-theme-chirpy/issues) 검색을 통해 트러블슈팅하면 대부분 에러들은 해결 가능했습니다.
 
+<br>
 
-
-
+<br>
 
 
 ## 커스터마이징 간 이슈 해결
@@ -222,6 +222,6 @@ Chirpy 테마의 커스터마이징은 하얀눈길님 [블로그](https://www.i
 
 
 
-- **avator 아이콘이 변경되지 않거나, 포스트 내 이미지에서 `The image could not be loaded.`  에러 발생하는 경우**
+- **avatar 아이콘이 변경되지 않거나, 포스트 내 이미지에서 `The image could not be loaded.`  에러 발생하는 경우**
 
   _config.xml에서 cdn을 사용하도록 설정되어있으므로, 이를 주석처리
