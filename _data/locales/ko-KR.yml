@@ -31,8 +31,8 @@ copyright:
   # Shown at the bottom of the post
   license:
     template: 
-    name: CC BY 4.0
-    link: https://creativecommons.org/licenses/by/4.0/
+    name: 
+    link:
 
   # Displayed in the footer
   brief: ㅤAll rights reserved.
@@ -47,7 +47,7 @@ not_found:
 
 notification:
   update_found: 새 버전의 콘텐츠를 사용할 수 있습니다.
-  update: 업데이트
+  update: Update
 
 # ----- Posts related labels -----
 
@@ -60,23 +60,26 @@ post:
   read_time:
     unit: min
     prompt: read
-  relate_posts: 관련된 글
-  share: 공유하기ㅤ
+  relate_posts: 관련 포스트
+  share: Share
   button:
-    next: 다음 글
-    previous: 이전 글
+    next: 다음 포스트
+    previous: 이전 포스트
     copy_code:
-      succeed: 복사되었습니다!
+      succeed: Copied!
     share_link:
       title: 링크 복사하기
-      succeed: 링크가 복사되었습니다!
+      succeed: Link copied successfully!
 
 # Date time format.
 # See: <http://strftime.net/>, <https://day.js.org/docs/en/display/format>
 df:
   post:
-    strftime: "%Y/%m/%d"
-    dayjs: "YYYY/MM/DD"
+    strftime: "%b %e, %Y"
+    dayjs: "ll"
+  archives:
+    strftime: "%b"
+    dayjs: "MMM"
 
 # categories page
 categories:
