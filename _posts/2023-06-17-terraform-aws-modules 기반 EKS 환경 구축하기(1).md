@@ -69,7 +69,7 @@ terraform {
 }
 
 provider "aws" {
-  profile = "ljyoon"
+  profile = "devops"
   region = "us-east-1"
 }
 
@@ -125,7 +125,7 @@ terraform {
   }
 
   backend "s3" {
-    profile        = "ljyoon"
+    profile        = "devops"
     bucket         = "devops-s3-tfstate"
     key            = "devops/terraform.tfstate"
     dynamodb_table = "devops-table-tfstate"
@@ -135,7 +135,7 @@ terraform {
 }
 
 provider "aws" {
-  profile = "ljyoon"
+  profile = "devops"
   region = "us-east-1"
 }
 ```
@@ -174,6 +174,16 @@ module "vpc" {
   tags = {
     CreatedBy = "Terraform"
   }
+}
+
+output "vpc_id" {
+  description = "The ID of the VPC"
+  value       = module.vpc.vpc_id
+}
+
+output "public_subnets" {
+  description = "List of IDs of public subnets"
+  value       = module.vpc.public_subnets
 }
 ```
 
@@ -225,7 +235,7 @@ data "aws_eks_cluster_auth" "eks" {name = module.eks.cluster_name}
 data "terraform_remote_state" "remote" {
   backend = "s3"
   config = {
-    profile = "ljyoon"
+    profile = "devops"
     bucket         = "devops-s3-tfstate"
     key            = "devops/terraform.tfstate"
     dynamodb_table = "devops-table-tfstate"
@@ -620,7 +630,7 @@ EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마�
 
 1. service > deploy > kubernetes 디렉토리 이동
 2. kubectl 명령어 사용을 위해 EKS 클러스터 내 kubeconfig를 업데이트합니다.
-   `aws eks update-kubeconfig --name devops-eks-cluster --profile ljyoon`
+   `aws eks update-kubeconfig --name devops-eks-cluster --profile devops`
 3. 서비스 소스 코드를 배포합니다.
    `kubectl apply -f complete-demo.yaml`
 4. 도메인(devops.jjikin.com)을 통해 접속 후 서비스를 확인합니다.
