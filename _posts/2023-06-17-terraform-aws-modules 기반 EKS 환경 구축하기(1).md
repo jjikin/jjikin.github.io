@@ -598,8 +598,6 @@ EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마�
 
 4. service > deploy > kubernetes > `complete-demo.yaml` 내 인증서 ARN, Domain 변경
 
-5. service > deploy > kubernetes > `complete-demo.yaml` 내 인증서 ARN 변경
-
    ![image-20230621125926221](/assets/img/posts/image-20230621125926221.png)
 
    <br>
