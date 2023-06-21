@@ -576,6 +576,31 @@ EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마�
 
 ## 구성 방법
 
+### 환경 구성
+
+1. Terraform 설치
+
+   ```shell
+   $ brew tap hashicorp/tap
+   $ brew install hashicorp/tap/terraform
+   ```
+
+2. AWS Configure 명령어를 통해 프로파일 추가
+   ```shell
+   $ aws configure --profile devops
+   AWS Access Key ID [None]: ******
+   AWS Secret Access Key [None]: ******
+   Default region name [None]: us-east-1
+   Default output format [None]: json
+   ```
+
+3. Terraform 코드 `eks.tf` 내 local 변수 값 `external_dns_arn` 에 Route53 호스팅영역 ARN 변경
+
+4. service > deploy > kubernetes > `complete-demo.yaml` 내 설정값 변경
+   ![image-20230621130244650](/assets/img/posts/image-20230621130244650.png)
+
+   <br>
+
 ### 인프라 생성
 
 1. backend 디렉토리에서 `terraform init`  및 `terraform apply`  실행
@@ -588,7 +613,7 @@ EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마�
 
 3. `eks.tf`를 다시 infra 디렉토리로 원복한 후  `terraform init`  및 `terraform apply`  실행
 
-
+<br>
 
 ### 내부 서비스 배포
 
@@ -599,7 +624,7 @@ EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마�
    `kubectl apply -f complete-demo.yaml`
 4. 도메인(devops.jjikin.com)을 통해 접속 후 서비스를 확인합니다.
 
-
+<br>
 
 ### 구성 삭제
 
