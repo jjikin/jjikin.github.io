@@ -10,15 +10,15 @@ image: /assets/img/posts/image-20230619231723025.png
 # https://chirpy.cotes.page/posts/text-and-typography/
 ---
 
-Devops 스터디를 위한 EKS 환경을 Terraform을 통해 구축합니다.
+Devops 스터디를 위한 EKS 환경을 모듈([terraform-aws-modules](https://github.com/terraform-aws-modules))을 활용하여 구축합니다.
 
-테라폼 관련 github 커뮤니티에서 AWS 리소스를 생성할 때 필요한 테라폼 코드를 모듈화하여 제공([terraform-aws-modules](https://github.com/terraform-aws-modules))하고 있어, 이를 활용하면 직접 코드를 작성하는 것 보다 간편하고 빠르게 리소스를 생성할 수 있습니다.
+테라폼 관련 github 커뮤니티에서 AWS 리소스를 생성할 때 필요한 테라폼 코드를 모듈화하여 제공하고 있어, 이를 활용하면 직접 코드를 작성하는 것 보다 간편하고 빠르게 리소스를 생성할 수 있습니다.
 
  
 
 필요한 모듈을 검색하고,  
 README.md와 Repository 내 example 디렉토리 내 코드를 참고하여 리소스 생성에 필요한 `Input`을 입력하면,  
-리소스를 포함하여  `Output` 까지 자동으로 생성해주므로 별도로 정의할 필요가 없습니다.
+리소스를 포함하여  `Output` 까지 자동으로 생성해주므로 특별한 케이스를 제외하면 별도로 정의할 필요가 없습니다.
 
 <br>
 
