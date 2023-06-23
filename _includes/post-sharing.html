@@ -8,7 +8,7 @@
     {% assign url = page.url | absolute_url | url_encode %}
 
     <!-- Share kakao Link -->
-    <!-- Share kakao Link Script-->
+    {% capture img %}src="{{ page.image.path | default: page.image }}"{% endcapture %}
     <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
     <script> Kakao.init('85d7b653c0d4f963bdafcc1c07338e51'); </script>
     <script>
@@ -16,8 +16,10 @@
         Kakao.Link.sendCustom({
           templateId: 95089,
           templateArgs: {
-            title: "title",
-            description: "test",
+            title: "{{ title }}",
+            description: "{{ site.subdescription }}",
+            url: "{{ url }}",
+            img: "{{ img }}",
           },
         });
       }
