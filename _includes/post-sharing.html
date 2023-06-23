@@ -8,6 +8,21 @@
     {% assign url = page.url | absolute_url | url_encode %}
 
     <!-- Share kakao Link -->
+    <!-- Share kakao Link Script-->
+    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <script>
+        Kakao.init("85d7b653c0d4f963bdafcc1c07338e51");
+        function sendLink() {
+          Kakao.Link.sendCustom({
+            templateId: 95089,
+            templateArgs: {
+              title: "{{ title }}",
+              description: "test",
+              url : "{{ url }}",
+            },
+          });
+        }
+    </script>
     <a
       href="javascript:sendLink()"
       data-bs-toggle="tooltip"
@@ -19,7 +34,7 @@
     >
       <i class="fa-fw fa-solid fa-comment"></i>
     </a>
-    
+
     {% for share in site.data.share.platforms %}
       {% assign link = share.link | replace: 'TITLE', title | replace: 'URL', url %}
       <a
@@ -48,18 +63,3 @@
   </span>
 </div>
 
-<!-- Share kakao Link Script-->
-<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
-<script>
-    Kakao.init("85d7b653c0d4f963bdafcc1c07338e51");
-    function sendLink() {
-      Kakao.Link.sendCustom({
-        templateId: 95089,
-        templateArgs: {
-          title: "{{ title }}",
-          description: "test",
-          url : "{{ url }}",
-        },
-      });
-    }
-</script>
