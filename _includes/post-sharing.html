@@ -13,15 +13,15 @@
     <script> Kakao.init('85d7b653c0d4f963bdafcc1c07338e51'); </script>
     <script>
       function shareLink() {
-        var url = "{{ url }}";
-        var img = "{{ pre_img }}";
+        //var url = "{{ url }}";
+        //var img = "{{ pre_img }}";
         Kakao.Link.sendCustom({
           templateId: 95089,
           templateArgs: {
             title: "{{ page.title }}",
             description: "{{ post.excerpt }}",
-            url : url,
-            img : img,
+            url : "https://jjikin.com/posts/terraform-aws-modules-%EA%B8%B0%EB%B0%98-EKS-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(2)/",
+            img : "https://cdn.jsdelivr.net/gh/jjikin/jjikin.github.io@main/assets/img/posts/image-20230619231723025.png"
           },
         });
       }
