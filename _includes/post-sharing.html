@@ -10,21 +10,20 @@
     <!-- Share kakao Link -->
     <!-- Share kakao Link Script-->
     <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <script> Kakao.init('85d7b653c0d4f963bdafcc1c07338e51'); </script>
     <script>
-        Kakao.init("85d7b653c0d4f963bdafcc1c07338e51");
-        function sendLink() {
-          Kakao.Link.sendCustom({
-            templateId: 95089,
-            templateArgs: {
-              title: "{{ title }}",
-              description: "test",
-              url : "{{ url }}",
-            },
-          });
-        }
+      function shareLink() {
+        Kakao.Link.sendCustom({
+          templateId: 95089,
+          templateArgs: {
+            title: "title",
+            description: "test",
+          },
+        });
+      }
     </script>
     <a
-      href="javascript:sendLink()"
+      href="javascript:shareLink()"
       data-bs-toggle="tooltip"
       data-bs-placement="top"
       title="{{ share.type }}"
