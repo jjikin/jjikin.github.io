@@ -13,13 +13,12 @@
     <script> Kakao.init('85d7b653c0d4f963bdafcc1c07338e51'); </script>
     <script>
       function shareLink() {
+        var post_title = '{{ title }}'
         Kakao.Link.sendCustom({
           templateId: 95089,
           templateArgs: {
-            title: "{{ title }}",
-            description: "{{ site.subdescription }}",
-            url: "{{ url }}",
-            //img: "{{ img }}",
+            title: post_title,
+            description: "test"
           },
         });
       }
