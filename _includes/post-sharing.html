@@ -7,6 +7,19 @@
     {% assign title = title | uri_escape %}
     {% assign url = page.url | absolute_url | url_encode %}
 
+    <!-- Share kakao Link -->
+    <a
+      href="javascript:sendLink()"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      title="{{ share.type }}"
+      target="_blank"
+      rel="noopener"
+      aria-label="{{ share.type }}"
+    >
+      <i class="fa-fw fa-solid fa-comment"></i>
+    </a>
+    
     {% for share in site.data.share.platforms %}
       {% assign link = share.link | replace: 'TITLE', title | replace: 'URL', url %}
       <a
@@ -21,19 +34,6 @@
         <i class="fa-fw {{ share.icon }}"></i>
       </a>
     {% endfor %}
-
-    <!-- Share kakao Link -->
-    <a
-      href="javascript:sendLink()"
-      data-bs-toggle="tooltip"
-      data-bs-placement="top"
-      title="{{ share.type }}"
-      target="_blank"
-      rel="noopener"
-      aria-label="{{ share.type }}"
-    >
-      <i class="fa-fw {{ share.icon }}"></i>
-    </a>
 
     <!-- Copy Link -->
     <i
