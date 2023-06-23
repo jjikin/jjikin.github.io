@@ -22,6 +22,20 @@
       </a>
     {% endfor %}
 
+    <!-- Share kakao Link -->
+    <a
+      href="javascript:sendLink()"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      title="{{ share.type }}"
+      target="_blank"
+      rel="noopener"
+      aria-label="{{ share.type }}"
+    >
+      <i class="fa-fw {{ share.icon }}"></i>
+    </a>
+
+    <!-- Copy Link -->
     <i
       id="copy-link"
       class="fa-fw fas fa-link small"
@@ -33,3 +47,19 @@
     </i>
   </span>
 </div>
+
+<!-- Share kakao Link Script-->
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script>
+    Kakao.init("85d7b653c0d4f963bdafcc1c07338e51");
+    function sendLink() {
+      Kakao.Link.sendCustom({
+        templateId: 95089,
+        templateArgs: {
+          title: "{{ title }}",
+          description: "test",
+          url : "{{ url }}",
+        },
+      });
+    }
+</script>
