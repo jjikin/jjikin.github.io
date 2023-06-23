@@ -7,8 +7,8 @@
     {% assign title = title | uri_escape %}
     {% assign url = page.url | absolute_url | url_encode %}
 
-    <!-- Share kakao Link -->
-    {% capture img %}src="{{ page.image.path | default: page.image }}"{% endcapture %}
+    <!-- Share Link to Kakao -->
+    {% capture pre_img %}{{ page.image.path | default: page.image }}"{% endcapture %}
     <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
     <script> Kakao.init('85d7b653c0d4f963bdafcc1c07338e51'); </script>
     <script>
@@ -17,7 +17,9 @@
           templateId: 95089,
           templateArgs: {
             title: "{{ page.title }}",
-            description: "{{ site.subdescription }}"
+            description: "{{ post.excerpt }}",
+            url: "{{ url }}",
+            img: "{{ pre_img }}",
           },
         });
       }
@@ -33,7 +35,8 @@
     >
       <i class="fa-fw fa-solid fa-comment"></i>
     </a>
-
+    
+    <!-- Telegram, Linkedin -->
     {% for share in site.data.share.platforms %}
       {% assign link = share.link | replace: 'TITLE', title | replace: 'URL', url %}
       <a
