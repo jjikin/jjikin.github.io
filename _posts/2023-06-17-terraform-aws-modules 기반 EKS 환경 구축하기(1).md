@@ -630,12 +630,17 @@ EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마�
 ### 내부 서비스 배포
 
 1. service > deploy > kubernetes 디렉토리 이동
+
 2. kubectl 명령어 사용을 위해 EKS 클러스터 내 kubeconfig를 업데이트합니다.  
-   
    `aws eks update-kubeconfig --name devops-eks-cluster --profile devops`
-3. 서비스 소스 코드를 배포합니다.  
+   
+3. kubectl을 통한 API 요청이 정상인지 확인합니다.  
+   `kubectl get nodes`
+   
+4. 서비스 소스 코드를 배포합니다.  
    `kubectl apply -f complete-demo.yaml`
-4. 도메인(devops.jjikin.com)을 통해 접속 후 서비스를 확인합니다.
+   
+5. 도메인(devops.jjikin.com)을 통해 접속 후 서비스를 확인합니다.
 
 <br>
 
