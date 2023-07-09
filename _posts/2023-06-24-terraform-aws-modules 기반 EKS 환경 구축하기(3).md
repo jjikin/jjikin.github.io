@@ -3,7 +3,7 @@ title: terraform-aws-modules 기반 EKS 환경 구축하기(3)
 date: 2023-06-24 21:15:15 +09:00
 categories: [devops-study, eks]
 tags: [aws, eks, kubenetes, k8s, terraform, iac, module]
-image: /assets/img/posts/image-20230619231723025.png
+image: image-20230619231723025.png
 # ------------------------------------------------------------------
 # 포스트 작성 시 참고 URL
 # https://chirpy.cotes.page/posts/write-a-new-post/
@@ -14,15 +14,16 @@ image: /assets/img/posts/
 
 이번 포스트에서는 terraform-aws-modules으로 구축했을 때 어떤 리소스들이 생성되는지 확인하고 미리 정의한 네이밍 규칙에 맞게 리소스를 재정의합니다.
 
-또한 소스 코드 내 주석 처리 및 불필요한 부분들을 최적화합니다.
+또한 소스 코드 내 주석 처리 및 불필요한 부분들을 정리합니다.
 
-
+<br>
 
 기존 포스트 내용대로 EKS를 구축하면 아래와 같이 IAM Role, Policy, SecurityGroup 등에서 prefix가 부여됩니다.
 
 ![image-20230709191027960](image-20230709191027960.png)
 
-만약 다른 리전에서 동일한 코드 및 이름으로 클러스터를 생성해야 하는 경우 이러한 prefix가 필요하지만, 그 외의 경우 prefix는 불필요하고 가시성도 떨어집니다.
+만약 다른 리전에서 동일한 코드 및 이름으로 클러스터를 생성해야 하는 경우 이러한 prefix가 필요하지만, 
+그 외의 경우 prefix는 불필요하고 가시성도 떨어집니다.
 
 terraform으로 생성된 리소스들을 `terraform state list` 명령어를 통해 확인한 후 하나씩 변경해보겠습니다.
 
@@ -159,6 +160,8 @@ module.eks.module.kms.data.aws_partition.current
 module.eks.module.kms.aws_kms_alias.this["cluster"]
 module.eks.module.kms.aws_kms_key.this[0]
 ```
+</details>
+
 
 
 
@@ -170,10 +173,10 @@ module.eks.module.kms.aws_kms_key.this[0]
 - IAM Policy : {프로젝트}-{리소스}-{용도}-policy
 - SecurityGroup : {프로젝트}-{리소스}-{용도}-sg
 
-변경하는 방법은 EKS 모듈에서 해당하는 값을 선언해주면 되는데, 관련 옵션을 확인하려면 아래와 같이 terraform-aws-modules 내 variable.tf 파일을 참고합니다.
-https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/modules/eks-managed-node-group/variables.tf
+변경하는 방법은 EKS 모듈에서 해당하는 값을 선언해주면 되는데, 관련 옵션을 확인하려면 [링크](https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/modules/eks-managed-node-group/variables.tf)와 같이 terraform-aws-modules 내 variable.tf 파일을 참고합니다.
+<br>
 
-
+<br>
 
 ### IAM Role
 
@@ -266,7 +269,7 @@ https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/modules/e
 
 
 
-
+<br>
 
 ### IAM Policy
 
@@ -312,7 +315,7 @@ https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/modules/e
 
 
 
-
+<br>
 
 ### SecurityGroup
 
@@ -390,7 +393,7 @@ https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/modules/e
 
 
 
-
+<br>
 
 ### KeyPair
 
