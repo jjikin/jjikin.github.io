@@ -316,7 +316,7 @@ https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/modules/e
 
 ### SecurityGroup
 
-- 클러스터 보안 그룹 `eks-cluster-sg-devops-eks-cluster-977726102` - [Link]([https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/sec-group-reqs.html)
+- 클러스터 보안 그룹 `eks-cluster-sg-devops-eks-cluster-977726102` - [Link](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/sec-group-reqs.html)
 
   EKS에 의해 자동 생성되며, 인바운드 소스를 Self(자기 자신)으로 설정해서 컨트롤 플레인과 워커 노드에 연결하여 둘 간의 통신이 항상 가능하도록 허용합니다.
 
