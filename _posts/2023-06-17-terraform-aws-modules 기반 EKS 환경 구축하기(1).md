@@ -40,7 +40,7 @@ devops-study
     │   ├── vpc.tf
     │   └── eks.tf
     └── service
-        ├── depoly
+        ├── deploy
         │   └── kubernetes
         ├── ...
 ```
