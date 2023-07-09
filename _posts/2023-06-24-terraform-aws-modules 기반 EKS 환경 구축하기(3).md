@@ -20,7 +20,7 @@ image: /assets/img/posts/
 
 기존 포스트 내용대로 EKS를 구축하면 아래와 같이 IAM Role, Policy, SecurityGroup 등에서 prefix가 부여됩니다.
 
-![image-20230709191027960](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230709191027960.png)
+![image-20230709191027960](image-20230709191027960.png)
 
 만약 다른 리전에서 동일한 코드 및 이름으로 클러스터를 생성해야 하는 경우 이러한 prefix가 필요하지만, 그 외의 경우 prefix는 불필요하고 가시성도 떨어집니다.
 
@@ -412,3 +412,50 @@ https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/modules/e
 
 
 
+
+
+
+
+EC2 인스턴스 네임 태그 -> 시작템플릿을 통해 부여가능
+
+
+terraform destory 과정에서 설치한 플러그인에서 connection refused 에러 발생 
+https://github.com/terraform-aws-modules/terraform-aws-eks/issues/911
+-> terraform에서 리소스를 삭제하는 과정에서 k8s 내 aws-auth configmap 리소스 삭제하고 클러스터를 삭제해야하는데, 이미 클러스터가 삭제상태에 들어간 상태에서 configmap을 삭제하기 위한 리소스 읽기 요청이 실패
+
+아래아 같이 상태파일에서 aws-auth configmap 관련 리소스를 수동으로 삭제해 준후 재시도한다.
+`terraform state rm module.eks.kubernetes_config_map_v1_data.aws_auth`
+-> 필요한가?
+
+`terraform destroy --auto-approve -refresh=false`
+-> 즉, 삭제 전 테라폼이 aws-auth configmap 을 최신상태로 업데이트한 후 삭제하지 않고 상태파일에 저장된 상태를 기준으로 삭제하도록 refresh 옵션을 비활성화하여 삭제
+
+![](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230625132119421.png)
+
+
+
+를참고하여  아래 추가 
+
+```hcl
+data "aws_eks_cluster" "cluster" {
+  name = module.eks.cluster_id
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = module.eks.cluster_id
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
+  load_config_file       = false
+  version                = "~> 1.12"
+}
+```
+
+
+
+
+
+21
