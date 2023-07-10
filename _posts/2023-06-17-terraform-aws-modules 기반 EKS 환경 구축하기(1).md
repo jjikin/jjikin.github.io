@@ -3,7 +3,7 @@ title: terraform-aws-modules 기반 EKS 환경 구축하기(1)
 date: 2023-06-17 00:00:00 +09:00
 categories: [devops-study, eks]
 tags: [aws, eks, kubenetes, k8s, terraform, iac, module]
-image: /assets/img/posts/image-20230619231723025.png
+image: /assets/img/posts/image-20230710103355989.png
 # ------------------------------------------------------------------
 # 포스트 작성 시 참고 URL
 # https://chirpy.cotes.page/posts/write-a-new-post/

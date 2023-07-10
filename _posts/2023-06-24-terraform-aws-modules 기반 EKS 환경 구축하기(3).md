@@ -3,13 +3,11 @@ title: terraform-aws-modules 기반 EKS 환경 구축하기(3)
 date: 2023-06-24 21:15:15 +09:00
 categories: [devops-study, eks]
 tags: [aws, eks, kubenetes, k8s, terraform, iac, module]
-image: image-20230619231723025.png
+image: /assets/img/posts/image-20230710103355989.png
 # ------------------------------------------------------------------
 # 포스트 작성 시 참고 URL
 # https://chirpy.cotes.page/posts/write-a-new-post/
 # https://chirpy.cotes.page/posts/text-and-typography/
-img_path: /assets/img/posts/
-image: /assets/img/posts/
 ---
 
 이번 포스트에서는 terraform-aws-modules으로 구축했을 때 어떤 리소스들이 생성되는지 확인하고 미리 정의한 네이밍 규칙에 맞게 리소스를 재정의합니다.
@@ -20,7 +18,7 @@ image: /assets/img/posts/
 
 기존 포스트 내용대로 EKS를 구축하면 아래와 같이 IAM Role, Policy, SecurityGroup 등에서 prefix가 부여됩니다.
 
-![image-20230709191027960](image-20230709191027960.png)
+![image-20230709191027960](/assets/img/posts/image-20230709191027960.png)
 
 만약 다른 리전에서 동일한 코드 및 이름으로 클러스터를 생성해야 하는 경우 이러한 prefix가 필요하지만, 
 그 외의 경우 prefix는 불필요하고 가시성도 떨어집니다.
@@ -180,12 +178,14 @@ module.eks.module.kms.aws_kms_key.this[0]
 
 ### IAM Role
 
-- Cluster IAM Role `devops-eks-cluster-cluster-20230624062324814400000006`
+- Cluster IAM Role
+
+  - 기존 리소스 : `devops-eks-cluster-cluster-20230624062324814400000006`
 
   - 연결된 Policy
     - AmazonEKSClusterPolicy
     - AmaonEKSVPCResourceController
-    - `devops-eks-cluster_encryption-policy20230709110325330300000012`
+    - devops-eks-cluster_encryption-policy20230709110325330300000012
       : etcd 암호화를 위한 kms키 권한
 
   - 네이밍 변경 : `devops-eks-cluster-role`
@@ -197,22 +197,24 @@ module.eks.module.kms.aws_kms_key.this[0]
       cluster_name                   = "${local.name}-cluster"
       cluster_version                = 1.24
       cluster_endpoint_public_access = true
-      iam_role_name = "${local.name}-cluster-role"  # 추가
-      iam_role_use_name_prefix = false           # 추가
+      iam_role_name = "${local.name}-cluster-role"   # 추가
+      iam_role_use_name_prefix = false   # 추가
       ...
     ```
+    <br>
 
-    
-
-- NodeGroup IAM Role ` devops-eks-app-ng-eks-node-group-2023062406233066610000000c`
+- NodeGroup IAM Role
 
   eks 모듈에서 노드 그룹별로 별도의 Role을 만들도록 설계되었으므로, 하나의 Role을 사용하기 위해서는 별도로 정의 후 arn을 지정해야 합니다.
+
+  - 기존 리소스 : ` devops-eks-app-ng-eks-node-group-2023062406233066610000000c`
 
   - 연결된 Policy
     - AmazonEKSWorkerNodePolicy
     - AmazonEKS_CNI_Policy
     - AmazonEC2ContainerRegistryReadOnlyAmazonEKSClusterPolicy
-  - 네이밍 변경 : `devops-eks-node-role` - 하나의 노드그룹을 같이 사용하도록 설정
+    
+  - 네이밍 변경 : `devops-eks-node-role`
 
   - 코드 내 변경 사항
 
@@ -222,10 +224,10 @@ module.eks.module.kms.aws_kms_key.this[0]
       eks_managed_node_group_defaults = {
         ami_type       = "AL2_x86_64"
         ...
-        create_iam_role            = false   											 								  # 추가
-        iam_role_name              = "${local.name}-node-role"    											# 추가
-        iam_role_arn               = module.iam_assumable_role_custom.iam_role_arn  # 추가
-        iam_role_use_name_prefix   = false     																			# 추가
+        create_iam_role            = false   # 추가
+        iam_role_name              = "${local.name}-node-role"   # 추가
+        iam_role_arn               = module.iam_assumable_role_custom.iam_role_arn   # 추가
+        iam_role_use_name_prefix   = false   # 추가
         iam_role_attach_cni_policy = true
         use_name_prefix            = false
         use_custom_launch_template = false
@@ -244,9 +246,9 @@ module.eks.module.kms.aws_kms_key.this[0]
         "ec2.amazonaws.com"
       ]
     
-      create_role = true
-      role_name   = "${local.name}-node-role"
-      role_requires_mfa = false
+      create_role             = true
+      role_name               = "${local.name}-node-role"
+      role_requires_mfa       = false
       custom_role_policy_arns = [
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
         "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
@@ -254,8 +256,7 @@ module.eks.module.kms.aws_kms_key.this[0]
       ]
     }
     ```
-
-
+<br>
 
 
 - IRSA Role
@@ -273,9 +274,11 @@ module.eks.module.kms.aws_kms_key.this[0]
 
 ### IAM Policy
 
-- encryption IAM Policy `devops-eks-cluster-cluster-ClusterEncryption202306240623305330300000012`
+- encryption IAM Policy
 
-  - etcd 저장소에 저장되는 데이터들을 CMK로 암복호화하기 위한 권한
+  etcd 저장소에 저장되는 데이터들을 CMK로 암복호화하기 위한 권한
+
+  - 기존 리소스 : `devops-eks-cluster-cluster-ClusterEncryption202306240623305330300000012`
 
   - 네이밍 변경 : `devops-eks-cluster-encryption-policy`
 
@@ -290,7 +293,7 @@ module.eks.module.kms.aws_kms_key.this[0]
       ...
     ```
 
-    
+    <br>
 
 - IRSA Policy
 
@@ -325,7 +328,7 @@ module.eks.module.kms.aws_kms_key.this[0]
 
   - 네이밍 변경 : EKS에서 자동생성하는 리소스로 변경이 불가능합니다.
 
-    
+    <br>
 
 - 컨트롤 플레인 보안 그룹(=추가 보안 그룹) `devops-eks-cluster-cluster-20230709113604226200000003`
 
@@ -345,7 +348,7 @@ module.eks.module.kms.aws_kms_key.this[0]
       cluster_security_group_tags    = {"Name" = "${local.name}-cluster-sg"}      # 추가
       ...
     ```
-
+<br>
 
 
 - 워커 노드 보안 그룹 `devops-eks-cluster-node-20230709113604228700000005`
@@ -414,51 +417,3 @@ module.eks.module.kms.aws_kms_key.this[0]
     ```
 
 
-
-
-
-
-
-EC2 인스턴스 네임 태그 -> 시작템플릿을 통해 부여가능
-
-
-terraform destory 과정에서 설치한 플러그인에서 connection refused 에러 발생 
-https://github.com/terraform-aws-modules/terraform-aws-eks/issues/911
--> terraform에서 리소스를 삭제하는 과정에서 k8s 내 aws-auth configmap 리소스 삭제하고 클러스터를 삭제해야하는데, 이미 클러스터가 삭제상태에 들어간 상태에서 configmap을 삭제하기 위한 리소스 읽기 요청이 실패
-
-아래아 같이 상태파일에서 aws-auth configmap 관련 리소스를 수동으로 삭제해 준후 재시도한다.
-`terraform state rm module.eks.kubernetes_config_map_v1_data.aws_auth`
--> 필요한가?
-
-`terraform destroy --auto-approve -refresh=false`
--> 즉, 삭제 전 테라폼이 aws-auth configmap 을 최신상태로 업데이트한 후 삭제하지 않고 상태파일에 저장된 상태를 기준으로 삭제하도록 refresh 옵션을 비활성화하여 삭제
-
-![](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230625132119421.png)
-
-
-
-를참고하여  아래 추가 
-
-```hcl
-data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
-}
-
-data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
-}
-
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-  load_config_file       = false
-  version                = "~> 1.12"
-}
-```
-
-
-
-
-
-21
