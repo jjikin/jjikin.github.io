@@ -672,4 +672,3 @@ output "public_subnets" {
   ```
 
   
-  
