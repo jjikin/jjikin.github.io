@@ -160,23 +160,70 @@ module.eks.module.kms.aws_kms_key.this[0]
 ```
 </details>
 
-
+<br>
 
 
 ## Terraform Code
 
-생성되는 리소스에 대한 네이밍 규칙을 정의하고 이에 맞게 기존 리소스 이름을 변경합니다. {프로젝트}-{리소스} 부분은 가능한 경우 ${local.name}으로 대체합니다.
+생성되는 리소스에 대한 네이밍 규칙을 정의하고 이에 맞게 기존 리소스 이름을 변경합니다. {프로젝트} 부분은 가능한 경우 ${local.name}으로 대체합니다.
 
-- IAM Role : {프로젝트}-{리소스}-{용도}-role
-- IAM Policy : {프로젝트}-{리소스}-{용도}-policy
-- SecurityGroup : {프로젝트}-{리소스}-{용도}-sg
+- {프로젝트}-{서비스}-{용도}-{리소스}
+  - IAM Role : devops-eks-cluster-role
+  - IAM Policy : devops-eks-encryption-policy
+  - SecurityGroup : devops-eks-node-sg
+
 
 변경하는 방법은 EKS 모듈에서 해당하는 값을 선언해주면 되는데, 관련 옵션을 확인하려면 [링크](https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/modules/eks-managed-node-group/variables.tf)와 같이 terraform-aws-modules 내 variable.tf 파일을 참고합니다.
 <br>
 
 <br>
 
-### IAM Role
+### vpc.tf
+
+라우팅 테이블, 인터넷 게이트웨이 이름(Tag)을 재정의합니다.
+
+```hcl
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+
+  name = "${local.name}-vpc"
+  cidr = "192.168.0.0/16"
+
+  azs                 = ["us-east-1a", "us-east-1c"]
+  public_subnets      = ["192.168.0.0/20", "192.168.16.0/20"]
+  public_subnet_names = ["${local.name}-pub-a-sn", "${local.name}-pub-c-sn"]
+  
+  public_subnet_tags       = {"kubernetes.io/role/elb" = 1}
+  public_route_table_tags  = {"Name" = "${local.name}-vpc-public-rt"}   # 추가
+  default_route_table_tags = {"Name" = "${local.name}-vpc-default-rt"}  # 추가
+  igw_tags                 = {"Name" = "${local.name}-vpc-public-igw"}  # 추가
+  
+  enable_nat_gateway       = false
+  enable_dns_hostnames     = true
+  enable_dns_support       = true
+  map_public_ip_on_launch  = true
+
+  tags = local.tags  # 추가
+}
+
+output "vpc_id" {
+  description = "The ID of the VPC"
+  value       = module.vpc.vpc_id
+}
+
+output "public_subnets" {
+  description = "List of IDs of public subnets"
+  value       = module.vpc.public_subnets
+}
+```
+
+<br>
+
+<br>
+
+### eks.tf
+
+#### IAM Role
 
 - Cluster IAM Role
 
@@ -194,10 +241,10 @@ module.eks.module.kms.aws_kms_key.this[0]
     ```hcl
     module "eks" {
       source = "terraform-aws-modules/eks/aws"
-      cluster_name                   = "${local.name}-cluster"
-      cluster_version                = 1.24
+      cluster_name                   = "${local.name}-eks-cluster"
+      cluster_version                = 1.27
       cluster_endpoint_public_access = true
-      iam_role_name = "${local.name}-cluster-role"   # 추가
+      iam_role_name = "${local.name}-eks-cluster-role"   # 추가
       iam_role_use_name_prefix = false   # 추가
       ...
     ```
@@ -225,7 +272,7 @@ module.eks.module.kms.aws_kms_key.this[0]
         ami_type       = "AL2_x86_64"
         ...
         create_iam_role            = false   # 추가
-        iam_role_name              = "${local.name}-node-role"   # 추가
+        iam_role_name              = "${local.name}-eks-node-role"   # 추가
         iam_role_arn               = module.iam_assumable_role_custom.iam_role_arn   # 추가
         iam_role_use_name_prefix   = false   # 추가
         iam_role_attach_cni_policy = true
@@ -247,7 +294,7 @@ module.eks.module.kms.aws_kms_key.this[0]
       ]
     
       create_role             = true
-      role_name               = "${local.name}-node-role"
+      role_name               = "${local.name}-eks-node-role"
       role_requires_mfa       = false
       custom_role_policy_arns = [
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
@@ -263,16 +310,16 @@ module.eks.module.kms.aws_kms_key.this[0]
 
   `role_name` 내 ${local.name} 적용
 
-  - devops-eks-vpc-cni-irsa-role → devops-eks-vpc_cni-role
-  - devops-eks-lb-controller-irsa-role → devops-eks-lb_controller-role
-  - devops-eks-lb-controller-tg-binding-only-irsa-role → devops-eks-lb_controller_tg-role
-  - devops-eks-externaldns-irsa-role → devops-eks-external_dns-role
+  - devops-eks-vpc-cni-irsa-role → `${local.name}-eks-vpc_cni-role`
+  - devops-eks-lb-controller-irsa-role → `${local.name}-eks-lb_controller-role`
+  - devops-eks-lb-controller-tg-binding-only-irsa-role → `${local.name}-eks-lb_controller_tg-role`
+  - devops-eks-externaldns-irsa-role → `${local.name}-eks-external_dns-role`
 
 
 
 <br>
 
-### IAM Policy
+#### IAM Policy
 
 - encryption IAM Policy
 
@@ -286,10 +333,10 @@ module.eks.module.kms.aws_kms_key.this[0]
     ```hcl
     module "eks" {
       ...
-      iam_role_name = "${local.name}-cluster-role"
+      iam_role_name = "${local.name}-eks-cluster-role"
       iam_role_use_name_prefix = false
-      cluster_encryption_policy_name = "${local.name}-cluster_encryption-policy"  # 추가
-      cluster_encryption_policy_use_name_prefix = false												 # 추가
+      cluster_encryption_policy_name = "${local.name}-eks-cluster-encryption-policy"  # 추가
+      cluster_encryption_policy_use_name_prefix = false  # 추가
       ...
     ```
 
@@ -305,22 +352,21 @@ module.eks.module.kms.aws_kms_key.this[0]
     module "vpc_cni_irsa_role" { 
       source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
     
-      role_name             = "${local.name}-vpc_cni-role"
-      policy_name_prefix = "${local.name}-"										# 추가
+      role_name             = "${local.name}-eks-vpc_cni-role"
+      policy_name_prefix = "${local.name}-eks-"  # 추가
       ...
-      
-    module "load_balancer_controller_irsa_role" { ...
-    module "load_balancer_controller_targetgroup_binding_only_irsa_role" { ...
-    module "external_dns_irsa_role" { ...
-    ...
-      
+    
+    # 아래 모듈에도 동일하게 적용
+    module "load_balancer_controller_irsa_role"
+    module "load_balancer_controller_targetgroup_binding_only_irsa_role"
+    module "external_dns_irsa_role"
     ```
 
 
 
 <br>
 
-### SecurityGroup
+#### SecurityGroup
 
 - 클러스터 보안 그룹 `eks-cluster-sg-devops-eks-cluster-977726102` - [Link](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/sec-group-reqs.html)
 
@@ -339,13 +385,13 @@ module.eks.module.kms.aws_kms_key.this[0]
     ```hcl
     module "eks" {
       ...
-      iam_role_name                  = "${local.name}-cluster-role"
+      iam_role_name                  = "${local.name}-eks-cluster-role"
       iam_role_use_name_prefix       = false
-      cluster_encryption_policy_name = "${local.name}-cluster_encryption-policy"
+      cluster_encryption_policy_name = "${local.name}-eks-cluster_encryption-policy"
       cluster_encryption_policy_use_name_prefix = false
-      cluster_security_group_name    = "${local.name}-cluster-sg" 			           # 추가
-      cluster_security_group_use_name_prefix = false       								     # 추가
-      cluster_security_group_tags    = {"Name" = "${local.name}-cluster-sg"}      # 추가
+      cluster_security_group_name    = "${local.name}-eks-cluster-sg"  # 추가
+      cluster_security_group_use_name_prefix = false  # 추가
+      cluster_security_group_tags    = {"Name" = "${local.name}-eks-cluster-sg"}  # 추가
       ...
     ```
 <br>
@@ -360,12 +406,12 @@ module.eks.module.kms.aws_kms_key.this[0]
     ```hcl
     module "eks" {
       ...
-      cluster_security_group_name    = "${local.name}-cluster-sg" 			           
+      cluster_security_group_name    = "${local.name}-eks-cluster-sg" 			           
       cluster_security_group_use_name_prefix = false       			
-      cluster_security_group_tags    = {"Name" = "${local.name}-cluster-sg"}
-      node_security_group_name			 = "${local.name}-node-sg" 							   # 추가
-      node_security_group_use_name_prefix = false                              # 추가
-      node_security_group_tags       = {"Name" = "${local.name}-node-sg"}      # 추가
+      cluster_security_group_tags    = {"Name" = "${local.name}-eks-cluster-sg"}
+      node_security_group_name			 = "${local.name}-eks-node-sg"  # 추가
+      node_security_group_use_name_prefix = false  # 추가
+      node_security_group_tags       = {"Name" = "${local.name}-eks-node-sg"}  # 추가
       ...
     ```
 
@@ -379,7 +425,7 @@ module.eks.module.kms.aws_kms_key.this[0]
 
     ```hcl
     resource "aws_security_group" "remote_access" {
-      name = "${local.name}-remote_access-sg"
+      name = "${local.name}-eks-remote_access-sg"
       description = "Allow remote SSH access"
       vpc_id      = local.vpc_id
     
@@ -398,7 +444,7 @@ module.eks.module.kms.aws_kms_key.this[0]
 
 <br>
 
-### KeyPair
+#### KeyPair
 
 - 원격 액세스를 위한 Key `devops-eks-cluster20230624135747050900000009`
 
@@ -411,9 +457,210 @@ module.eks.module.kms.aws_kms_key.this[0]
       source  = "terraform-aws-modules/key-pair/aws"
       version = "~> 2.0"
     
-      key_name           = "devops-ssh-keypair"
+      key_name           = "${local.name}-ssh-keypair"
       create_private_key = true
     }
     ```
 
+<br>
 
+#### Tagging
+
+- 각 모듈을 통해 생성된 리소스에 Tag 추가
+
+  ```hcl
+  locals {
+    name              = "devops"
+    vpc_id            = data.terraform_remote_state.remote.outputs.vpc_id
+    subnet_ids        = data.terraform_remote_state.remote.outputs.public_subnets
+    ...
+    tags = {
+      CreatedBy = "Terraform"
+    }
+  }
+  ```
+
+  ```hcl
+  module "eks" {
+    source  = "terraform-aws-modules/eks/aws"
+  
+    cluster_name                   = "${local.name}-eks-cluster"
+    cluster_version                = 1.27
+    cluster_endpoint_public_access = true
+    iam_role_name = "${local.name}-eks-cluster-role"
+    iam_role_use_name_prefix = false
+  
+    tags = local.tags  # 추가
+  ```
+
+  ```hcl
+  module "vpc_cni_irsa_role" { 
+    source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  
+    role_name             = "${local.name}-eks-vpc_cni-role"
+    policy_name_prefix    = "${local.name}-eks-"
+    ...
+    tags = local.tags  # 추가
+  }  
+  
+  # 아래 모듈에도 동일하게 적용
+  module "load_balancer_controller_irsa_role"
+  module "load_balancer_controller_targetgroup_binding_only_irsa_role"
+  module "external_dns_irsa_role"
+  module "iam_assumable_role_custom"
+  module "key_pair"
+  ```
+
+
+
+- 별도 생성한 Resource에 Tag 추가
+
+  ```hcl
+  resource "aws_security_group" "remote_access" {
+    name = "${local.name}-eks-remote_access-sg"
+    description = "Allow remote SSH access"
+    vpc_id      = local.vpc_id
+    ...
+    tags = local.tags  # 추가
+  }
+  
+  # 아래 리소스는 k8s 내 생성되는 리소스이므로 태깅 제외
+  resource "kubernetes_service_account" "aws-load-balancer-controller"
+  resource "kubernetes_service_account" "external-dns"
+  resource "helm_release" "aws-load-balancer-controller"
+  resource "helm_release" "external_dns"
+  ```
+
+
+<br>
+
+#### 워커 노드에 ec2 Name Tag 추가
+
+- 워커 노드에 ec2 Name Tag를 추가하려면 사용자지정 시작 템플릿을 사용해야합니다.
+
+- 사용자지정 시작 템플릿을 사용하면 워커 노드에 접속하기 위해 eks module에 정의했던 remote_access 설정을 지원하지 않으므로 시작 템플릿에 별도 지정해야합니다.
+  여기서는 노드 Role `devops-eks-node-role` 에 SSM을 통해 접근할 수 있도록 설정합니다.
+
+  ```hcl
+  module "eks" {
+    ...
+    eks_managed_node_group_defaults = {
+      ami_type                   = "AL2_x86_64"
+      instance_types             = ["t3.medium"]  # 이동
+      capacity_type              = "SPOT"  # 이동
+  
+      create_iam_role            = false
+      iam_role_name              = "${local.name}-eks-node-role"
+      iam_role_arn               = module.iam_assumable_role_custom.iam_role_arn
+      iam_role_use_name_prefix   = false
+      iam_role_attach_cni_policy = true
+      use_name_prefix            = false  # false 하지 않으면 리소스 이름 뒤 임의의 난수값이 추가되어 생성됨
+      
+      use_custom_launch_template      = true   # true로 변경 false:AWS EKS 관리 노드 그룹에서 제공하는 기본 템플릿을 사용
+      launch_template_use_name_prefix = false  # 추가
+      enable_bootstrap_user_data      = true  # 추가 
+      # 사용자 지정 템플릿을 노드그룹에 지정하는 경우 노드가 클러스터에 join 하기위한 부트스트랩이 자동 적용되지 않음. 따라서 해당 옵션 true 설정 필요
+  
+      block_device_mappings = {  # 이동
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = 30
+            volume_type           = "gp3"
+            delete_on_termination = true
+          }
+        }
+      }
+  
+      remote_access = {  # 삭제
+        ec2_ssh_key               = module.key_pair.key_pair_name
+        source_security_group_ids = [aws_security_group.remote_access.id]
+        tags = {
+          "kubernetes.io/cluster/devops-eks-cluster" = "owned"  # 이동(AWS LB Controller 사용을 위한 요구 사항)
+        }
+      }
+    }
+    ...
+  }
+  ```
+  
+  <br>
+  
+- `eks_managed_node_group_defaults`에서 정의했던 내용을 시작 템플릿으로 이동 및 삭제한 후의 Code는 아래와 같습니다.
+
+  ```hcl
+  module "eks" {
+    ...
+    eks_managed_node_group_defaults = {
+      ami_type                   = "AL2_x86_64"
+  
+      create_iam_role            = false
+      iam_role_name              = "${local.name}-eks-node-role"
+      iam_role_arn               = module.iam_assumable_role_custom.iam_role_arn
+      iam_role_use_name_prefix   = false
+      iam_role_attach_cni_policy = true
+      use_name_prefix            = false  # false 하지 않으면 리소스 이름 뒤 임의의 난수값이 추가되어 생성됨
+      
+      use_custom_launch_template      = true
+      launch_template_use_name_prefix = false
+      enable_bootstrap_user_data      = true
+    }
+    ...
+  }
+  ```
+
+
+
+- app, mgmt 노드용 custom launch template을 생성합니다.
+
+  ```hcl  
+  # app launch template, mgmt도 동일하게 생성
+  resource "aws_launch_template" "app_launch_template" {
+    name     = "${local.name}-eks-app_node-lt"
+    instance_type = "t3.medium"
+    instance_market_options { market_type = "spot" }
+    key_name = module.key_pair.key_pair_name
+    vpc_security_group_ids = [aws_security_group.remote_access.id] # Cluster 보안그룹은 자동 Attach
+  
+    block_device_mappings {
+      device_name = "/dev/xvda"
+      ebs {
+        volume_size           = 30
+        volume_type           = "gp3"
+        delete_on_termination = true
+      }
+    }  
+  
+    tag_specifications {
+      resource_type = "instance"
+      tags = { Name = "${local.name}-eks-app-node" }
+    } 
+    tag_specifications {
+      resource_type = "volume"
+      tags = { Name = "${local.name}-eks-app_node-root_ebs" }
+    }
+    
+    tags = local.tags # LT Tag
+  }
+  ```
+
+  
+
+- eks 노드 그룹 정의에 시작템플릿을 추가합니다.
+
+  ```hcl
+    eks_managed_node_groups = {
+      devops-eks-app-ng = {
+        name         = "${local.name}-app-ng"
+        launch_template_id = aws_launch_template.app_launch_template.id  # 추가
+  			...
+      }
+  
+      devops-eks-mgmt-ng = {
+        name         = "${local.name}-mgmt-ng"
+        launch_template_id = aws_launch_template.mgmt_launch_template.id  # 추가   
+        ...
+      } 
+  ```
+
+  

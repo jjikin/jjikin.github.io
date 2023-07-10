@@ -108,7 +108,7 @@ module "dynamodb_table" {
 
 ### main.tf
 
-프로바이더 정의와 상태 파일 저장을 위한 Backend를 정의합니다.
+프로바이더 정의와 상태 파일 저장을 위한 Backend, Local 변수를 정의합니다.
 
 <details markdown="1">
   <summary>코드 접기/펼치기</summary>
@@ -137,6 +137,17 @@ terraform {
 provider "aws" {
   profile = "devops"
   region = "us-east-1"
+}
+
+locals {
+  name              = "devops"
+  vpc_id            = module.vpc.vpc_id
+  subnet_ids        = module.vpc.public_subnets
+  external_dns_arn  = "arn:aws:route53:::hostedzone/Z08574211BOF867DLRAI2"  # 개인용 Route53 HostingZone
+  external_cert_arn = "arn:aws:acm:us-east-1:371604478497:certificate/725fd9d7-5e31-4750-a161-4f67cd6bb9f0"
+  tags = {
+    CreatedBy = "Terraform"
+  }
 }
 ```
 
@@ -617,13 +628,8 @@ EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마�
 
 1. backend 디렉토리에서 `terraform init`  및 `terraform apply`  실행
 
-2. infra 디렉토리에서 `eks.tf`를 다른 곳으로 임시 이동시켜 제외한 후  `terraform init`  및 `terraform apply`  실행
+2. infra 디렉토리에서 `terraform init`  및 `terraform apply`  실행
 
-   {: .prompt-info }
-
-   > 초기 상태 파일의 경우 빈(empty) 파일이므로 data source가 포함된 `eks.tf`를 같이 생성하면 vpc 리소스 정보를 가져올 수 없기 때문입니다.
-
-3. `eks.tf`를 다시 infra 디렉토리로 원복한 후  `terraform init`  및 `terraform apply`  실행
 
 <br>
 
