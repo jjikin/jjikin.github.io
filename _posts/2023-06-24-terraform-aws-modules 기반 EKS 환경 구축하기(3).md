@@ -3,7 +3,7 @@ title: terraform-aws-modules 기반 EKS 환경 구축하기(3)
 date: 2023-06-24 21:15:15 +09:00
 categories: [devops-study, eks]
 tags: [aws, eks, kubenetes, k8s, terraform, iac, module]
-image: /assets/img/posts/image-20230710103355989.png
+image: /assets/img/posts/image-20230711103355989.png
 # ------------------------------------------------------------------
 # 포스트 작성 시 참고 URL
 # https://chirpy.cotes.page/posts/write-a-new-post/
@@ -547,7 +547,7 @@ output "public_subnets" {
     eks_managed_node_group_defaults = {
       ami_type                   = "AL2_x86_64"
       instance_types             = ["t3.medium"]  # 이동
-      capacity_type              = "SPOT"  # 이동
+      capacity_type              = "SPOT"
   
       create_iam_role            = false
       iam_role_name              = "${local.name}-eks-node-role"
@@ -556,8 +556,8 @@ output "public_subnets" {
       iam_role_attach_cni_policy = true
       use_name_prefix            = false  # false 하지 않으면 리소스 이름 뒤 임의의 난수값이 추가되어 생성됨
       
+      create_launch_template          = false  # 추가
       use_custom_launch_template      = true   # true로 변경 false:AWS EKS 관리 노드 그룹에서 제공하는 기본 템플릿을 사용
-      launch_template_use_name_prefix = false  # 추가
       enable_bootstrap_user_data      = true  # 추가 
       # 사용자 지정 템플릿을 노드그룹에 지정하는 경우 노드가 클러스터에 join 하기위한 부트스트랩이 자동 적용되지 않음. 따라서 해당 옵션 true 설정 필요
   
@@ -593,7 +593,8 @@ output "public_subnets" {
     ...
     eks_managed_node_group_defaults = {
       ami_type                   = "AL2_x86_64"
-  
+  		capacity_type              = "SPOT"
+  		
       create_iam_role            = false
       iam_role_name              = "${local.name}-eks-node-role"
       iam_role_arn               = module.iam_assumable_role_custom.iam_role_arn
@@ -601,8 +602,8 @@ output "public_subnets" {
       iam_role_attach_cni_policy = true
       use_name_prefix            = false  # false 하지 않으면 리소스 이름 뒤 임의의 난수값이 추가되어 생성됨
       
+      create_launch_template          = false
       use_custom_launch_template      = true
-      launch_template_use_name_prefix = false
       enable_bootstrap_user_data      = true
     }
     ...
@@ -614,6 +615,12 @@ output "public_subnets" {
 - app, mgmt 노드용 custom launch template을 생성합니다.
 
   ```hcl  
+  # main.tf에 variable 변수 생성
+  variable "lt_resource_tags" {  # LT 리소스 태깅을 위한 변수
+    type    = set(string)
+    default = ["instance", "volume", "network-interface", "spot-instances-request"]
+  }
+  
   # app launch template, mgmt도 동일하게 생성
   resource "aws_launch_template" "app_launch_template" {
     name     = "${local.name}-eks-app_node-lt"
@@ -631,13 +638,14 @@ output "public_subnets" {
       }
     }  
   
-    tag_specifications {
-      resource_type = "instance"
-      tags = { Name = "${local.name}-eks-app-node" }
-    } 
-    tag_specifications {
-      resource_type = "volume"
-      tags = { Name = "${local.name}-eks-app_node-root_ebs" }
+    dynamic "tag_specifications" {
+      for_each = var.lt_resource_tags
+      content {
+        resource_type = tag_specifications.key
+        tags = {
+          Name = "${local.name}-eks-app-node"
+        }
+      }
     }
     
     tags = local.tags # LT Tag
