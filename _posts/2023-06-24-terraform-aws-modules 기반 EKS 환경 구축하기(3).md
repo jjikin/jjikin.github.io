@@ -233,8 +233,9 @@ output "public_subnets" {
     - AmazonEKSClusterPolicy
     - AmaonEKSVPCResourceController
     - devops-eks-cluster_encryption-policy20230709110325330300000012
+    
       : etcd 암호화를 위한 kms키 권한
-
+    
   - 네이밍 변경 : `devops-eks-cluster-role`
 
   - 코드 내 변경 사항
@@ -254,7 +255,7 @@ output "public_subnets" {
 
   eks 모듈에서 노드 그룹별로 별도의 Role을 만들도록 설계되었으므로, 하나의 Role을 사용하기 위해서는 별도로 정의 후 arn을 지정해야 합니다.
 
-  - 기존 리소스 : ` devops-eks-app-ng-eks-node-group-2023062406233066610000000c`
+  - 기존 리소스 : `devops-eks-app-ng-eks-node-group-2023062406233066610000000c`
 
   - 연결된 Policy
     - AmazonEKSWorkerNodePolicy
@@ -308,7 +309,7 @@ output "public_subnets" {
 
 - IRSA Role
 
-  `role_name` 내 ${local.name} 적용
+  role_name 내 `${local.name}` 적용
 
   - devops-eks-vpc-cni-irsa-role → `${local.name}-eks-vpc_cni-role`
   - devops-eks-lb-controller-irsa-role → `${local.name}-eks-lb_controller-role`
@@ -323,7 +324,7 @@ output "public_subnets" {
 
 - encryption IAM Policy
 
-  etcd 저장소에 저장되는 데이터들을 CMK로 암복호화하기 위한 권한
+  : etcd 저장소에 저장되는 데이터들을 CMK로 암복호화하기 위한 권한
 
   - 기존 리소스 : `devops-eks-cluster-cluster-ClusterEncryption202306240623305330300000012`
 
@@ -344,10 +345,12 @@ output "public_subnets" {
 
 - IRSA Policy
 
-  IRSA를 생성해주는 모듈`iam-role-for-service-accounts-eks`에서는 Role에 부여되는 Policy 이름을 변경할 수 있는 Variable을 제공하지 않았습니다. 
+  IRSA를 생성해주는 모듈`iam-role-for-service-accounts-eks`에서는 Role에 부여되는 Policy 이름을 변경할 수 있는 Variable을 제공하지 않았습니다.  
   Policy를 별도로 생성한 후 arn을 모듈로 전달하는 방식으로 해결가능하지만 추후 컴포넌트 추가 시 Policy도 생성해줘야하는 번거로움이 있어 prefix만 변경했습니다.
 
-  - prefix 변경 `AmazonEKS_CNI_Policy-20230624062324810600000001` → `devops-eks-CNI_Policy-20230624062324810600000001`
+  - prefix 변경 `AmazonEKS_CNI_Policy-20230624062324810600000001`  
+    → `devops-eks-CNI_Policy-20230624062324810600000001`
+    
     ```hcl
     module "vpc_cni_irsa_role" { 
       source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
@@ -414,8 +417,7 @@ output "public_subnets" {
       node_security_group_tags       = {"Name" = "${local.name}-eks-node-sg"}  # 추가
       ...
     ```
-
-
+    <br>
 
 - 원격 액세스를 위한 보안 그룹 `eks-remoteAccess-0cc49d3d-1761-a381-d042-32af9ba4cfce`
 
@@ -471,11 +473,11 @@ output "public_subnets" {
   ```hcl
   locals {
     name              = "devops"
-    vpc_id            = data.terraform_remote_state.remote.outputs.vpc_id
-    subnet_ids        = data.terraform_remote_state.remote.outputs.public_subnets
+    vpc_id            = module.vpc.vpc_id
+    subnet_ids        = module.vpc.public_subnets
     ...
     tags = {
-      CreatedBy = "Terraform"
+      CreatedBy = "Terraform"  # 추가
     }
   }
   ```
@@ -538,7 +540,7 @@ output "public_subnets" {
 
 - 워커 노드에 ec2 Name Tag를 추가하려면 사용자지정 시작 템플릿을 사용해야합니다.
 
-- 사용자지정 시작 템플릿을 사용하면 워커 노드에 접속하기 위해 eks module에 정의했던 remote_access 설정을 지원하지 않으므로 시작 템플릿에 별도 지정해야합니다.
+- 사용자지정 시작 템플릿을 사용하면 워커 노드에 접속하기 위해 eks module에 정의했던 remote_access 설정을 지원하지 않으므로 시작 템플릿에 별도 지정해야합니다.  
   여기서는 노드 Role `devops-eks-node-role` 에 SSM을 통해 접근할 수 있도록 설정합니다.
 
   ```hcl
@@ -554,6 +556,9 @@ output "public_subnets" {
       iam_role_arn               = module.iam_assumable_role_custom.iam_role_arn
       iam_role_use_name_prefix   = false
       iam_role_attach_cni_policy = true
+      iam_role_additional_policies = {
+        AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"  # 추가
+      }   
       use_name_prefix            = false  # false 하지 않으면 리소스 이름 뒤 임의의 난수값이 추가되어 생성됨
       
       create_launch_template          = false  # 추가
@@ -600,7 +605,10 @@ output "public_subnets" {
       iam_role_arn               = module.iam_assumable_role_custom.iam_role_arn
       iam_role_use_name_prefix   = false
       iam_role_attach_cni_policy = true
-      use_name_prefix            = false  # false 하지 않으면 리소스 이름 뒤 임의의 난수값이 추가되어 생성됨
+      iam_role_additional_policies = {
+        AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"  # 추가
+      }      
+      use_name_prefix            = false
       
       create_launch_template          = false
       use_custom_launch_template      = true
@@ -610,7 +618,7 @@ output "public_subnets" {
   }
   ```
 
-
+<br>
 
 - app, mgmt 노드용 custom launch template을 생성합니다.
 
@@ -652,7 +660,7 @@ output "public_subnets" {
   }
   ```
 
-  
+  <br>
 
 - eks 노드 그룹 정의에 시작템플릿을 추가합니다.
 
