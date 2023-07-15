@@ -55,7 +55,6 @@ GitLab 설치에 필요한 최소 사양은 CPU 4Core + Mem 4GB 이상으로, �
    curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
    ```
    <br>
-
 5. 편리한 사용을 위해 Route53에서 별도 도메인 생성 후 설치 간 환경변수로 추가하고 root의 초기 패스워드도 같이 설정합니다.  
    (미설정 시 설치 완료 후 /etc/gitlab/initial_root_password에서 확인해야합니다.)
   ```shell
@@ -63,47 +62,35 @@ GitLab 설치에 필요한 최소 사양은 CPU 4Core + Mem 4GB 이상으로, �
   sudo GITLAB_ROOT_PASSWORD='패스워드 입력' EXTERNAL_URL='https://gitlab.jjikin.com' yum install -y gitlab-ce
   ```
 <br>
-
 6. 설치 완료까지 약간의 시간이 소요됩니다.
    ![image-20230715182731486](/assets/img/posts/image-20230715182731486.png)
-<br>
+   <br>
+
 7. 설정한 도메인 주소와 계정 정보로 GitLab에 접속합니다.
 	![image-20230713211140295](/assets/img/posts/image-20230713211140295.png)
+
 <br>
 
 ### 초기 설정
 
-1. User 생성  
-
+1. User 생성
    사용할 신규 User를 생성한 후 로그인 합니다. 패스워드의 경우 존재하지 않는 email을 사용했으므로 계정 생성 후 별도로 변경했습니다.
-
-![image-20230713211815781](/assets/img/posts/image-20230713211815781.png)
-
-<br>
+	![image-20230713211815781](/assets/img/posts/image-20230713211815781.png)
+  <br>
 
 2. Private Project 생성
-
-![image-20230713212228814](/assets/img/posts/image-20230713212228814.png)
-
-<br>
+	![image-20230713212228814](/assets/img/posts/image-20230713212228814.png)
+	<br>
 
 3. Atlantis User 생성
-
    Atlantis 사용 간 혼선을 막기 위해 Atlantis용 User를 생성한 후 Project에 초대합니다.
-
    ![image-20230715183338279](/assets/img/posts/image-20230715183338279.png)
-   
    ![image-20230713214915587](/assets/img/posts/image-20230713214915587.png)
-
 <br>
 
 4. Atlantis에서 GitLab API 호출을 위한 Access Token 생성
-
    프로젝트 선택 - Settings - Access Token에서 아래와 같이 입력 후 토큰을 생성하면 상단에 토근값이 출력되며 기록해둡니다.
-
    ![image-20230713215855683](/assets/img/posts/image-20230713215855683.png)
-
-<br>
 
 <br>
 
@@ -112,51 +99,47 @@ GitLab 설치에 필요한 최소 사양은 CPU 4Core + Mem 4GB 이상으로, �
 Atlantis는 Pull Request를 통해 Terraform Workflow를 자동화해주는 오픈소스 Tool입니다.  
 앞으로 진행될 스터디에서 팀원들 간 EKS를 구성하는 Terraform Code의 관리와 협업을 위해 꼭 필요한 툴이기에 선택하게 되었습니다.
 
-<br>
-
 ### 초기 설정
 
 1. Atlantis는 PV를 사용하므로 ebs-csi-driver 설치가 필요합니다. 아래와 같이 코드 추가 후 재배포 합니다.
-
-```hcl
-# eks.tf
-module "eks" {
-  source  = "terraform-aws-modules/eks/aws"
-  ...
-  cluster_addons = {
-    coredns = {
-      most_recent       = true
-      resolve_conflicts = "OVERWRITE"
-    }
+  ```hcl
+  # eks.tf
+  module "eks" {
+    source  = "terraform-aws-modules/eks/aws"
     ...
-    aws-ebs-csi-driver = {  # 추가
-      most_recent = true
-      service_account_role_arn = module.ebs_csi_driver_irsa_role.iam_role_arn
+    cluster_addons = {
+      coredns = {
+        most_recent       = true
+        resolve_conflicts = "OVERWRITE"
+      }
+      ...
+      aws-ebs-csi-driver = {  # 추가
+        most_recent = true
+        service_account_role_arn = module.ebs_csi_driver_irsa_role.iam_role_arn
+      }
     }
-	}
- ...
-}  
-```
+   ...
+  }  
+  ```
+  ```hcl
+  # IRSA Module 추가
+  module "ebs_csi_driver_irsa_role" {
+    source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
-```hcl
-# IRSA Module 추가
-module "ebs_csi_driver_irsa_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+    role_name                     = "${local.name}-eks-ebs_csi-role"
+    policy_name_prefix            = "${local.name}-eks-"  
+    attach_ebs_csi_policy = true
 
-  role_name                     = "${local.name}-eks-ebs_csi-role"
-  policy_name_prefix            = "${local.name}-eks-"  
-  attach_ebs_csi_policy = true
-
-  oidc_providers = {
-    main = {
-      provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
+    oidc_providers = {
+      main = {
+        provider_arn               = module.eks.oidc_provider_arn
+        namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
+      }
     }
+
+    tags = local.tags
   }
-
-  tags = local.tags
-}
-```
+  ```
 
 <br>
 
@@ -164,62 +147,42 @@ module "ebs_csi_driver_irsa_role" {
    GitLab으로부터 수신한 Webhook이 올바른 요청인지 확인하기 위한 Secret Token을 생성해야합니다. 공식 문서에서 제공한 [링크](https://www.browserling.com/tools/random-string)에서 아래 설정으로 Random String을 생성합니다.
 
    - Format : a-zA-Z mixed case
-
-
    - Length : 32~128
-
 
 {: .prompt-warning }
 
   > String에 특수문자가 있거나 28문자보다 짧을 경우 400 Error(Unauthorized & did not match expected secret)가 발생할 수 있습니다.
 
-
-
+<br>
 3. Webhook 설정
-
    생성한 Secret Token을 포함하여 Webhook을 보낼 Atlantis URL과 트리거를 입력합니다.
    ![image-20230715194410691](/assets/img/posts/image-20230715194410691.png)
 
 <br>
 
-<br>
-
 ### 설치 방법
-
 Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs](https://www.runatlantis.io/docs)를 참고하여 진행했습니다.
 
-
 1. helm에 runatlantis helm 차트 저장소 추가
-
-```shell
-helm repo add runatlantis https://runatlantis.github.io/helm-charts
-```
-
+  ```shell
+  helm repo add runatlantis https://runatlantis.github.io/helm-charts
+  ```
 <br>
 
 2. Access Token, Secret 설정을 위한 values.yaml 생성
-
-```
-helm inspect values runatlantis/atlantis > atlantis_values.yaml
-```
-
+  ```
+  helm inspect values runatlantis/atlantis > atlantis_values.yaml
+  ```
 <br>
 
 3. atlantis_value.yaml 파일을 수정합니다.
-
-
 - Webhook를 허용할 리포지토리를 입력합니다.
-
   ```yaml
   # Replace this with your own repo allowlist:
   orgAllowlist: gitlab.jjikin.com/jjikin/devops  # {hostname}/{owner}/{repo}
   ```
-  
-
-​    
 
 - GitLab 연동을 위한 정보를 입력합니다.
-
   ```yaml
   # If using GitLab, specify like the following:
   gitlab:
@@ -230,21 +193,15 @@ helm inspect values runatlantis/atlantis > atlantis_values.yaml
     hostname: https://gitlab.jjikin.com
   ```
 
-
-
 - Atlantis에 로그인하기 위한 계정 정보를 설정합니다.
-
   ```yaml
   basicAuth: # atlantis account info
     username: "atlantis"
     password: "atlantis"
   ```
 
-  
-
 - ingress 설정
   Atlantis만을 위한 별도의 ALB 생성은 불필요하므로, 내부 서비스`sockshop` 생성 시 같이 생성했던 ALB를 사용합니다.
-
   ```yaml
   ingress:
     enabled: true
@@ -259,11 +216,8 @@ helm inspect values runatlantis/atlantis > atlantis_values.yaml
   
   ```
 
-  
-
 - PV 설정
   Atlanstis는 `Terraform init` 실행 시 필요한 Module을 PV에 저장합니다. 모듈 용량이 클 경우 디스크 용량을 적절히 부여해야합니다.
-
   ```yaml
   volumeClaim:
     enabled: true
@@ -272,10 +226,7 @@ helm inspect values runatlantis/atlantis > atlantis_values.yaml
     storageClassName: gp2
   ```
 
-  
-
 - ServiceAccount 설정
-
   ```yaml
   serviceAccount:
     create: true
@@ -285,23 +236,14 @@ helm inspect values runatlantis/atlantis > atlantis_values.yaml
       eks.amazonaws.com/role-arn: "arn:aws:iam::371604478497:role/devops-atlantis-role" # 직접 설정 필요
   ```
 
-  
-
 - 이외 추가할 변수들은 [링크](https://github.com/runatlantis/helm-charts#customization)를 통해 확인 후 추가 및 변경합니다.
   <br>
 
-4. 배포
-
+4. Helm을 통한 배포
    ```bash
    kubectl create namespace atlantis
    helm install atlantis runatlantis/atlantis -f atlantis_values.yaml -n atlantis
    ```
-
-   
-
-
-
-
 
 
 <br>
