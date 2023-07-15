@@ -39,47 +39,36 @@ GitLab 설치에 필요한 최소 사양은 CPU 4Core + Mem 4GB 이상으로, �
 설치는 [GitLab Docs](https://about.gitlab.com/install/#amazonlinux-2)를 참고하여 진행했습니다.
 
 1. EC2 Instance 생성 시 설정한 보안그룹에 SSH 및 GitLab 접속을 위한 보안그룹 규칙을 설정합니다.
-
    ![image-20230713202810944](/assets/img/posts/image-20230713202810944.png)
-
    <br>
-
+   
 2. EC2 Instance에 Elastic IP를 할당합니다.
-
    ![image-20230715182553036](/assets/img/posts/image-20230715182553036.png)
-<br>
+   <br>
+   
 3. GitLab에 사용할 도메인을 생성합니다.
-
-![image-20230713201840303](/assets/img/posts/image-20230713201840303.png)
-
-<br>
-
+	![image-20230713201840303](/assets/img/posts/image-20230713201840303.png)
+	<br>
+	
 4. EC2 Instance 접속 후 GitLab 패키지 저장소를 추가합니다.
-
-```shell
-curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
-```
-
-<br>
+   ```bash
+   curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
+   ```
+   <br>
 
 5. 편리한 사용을 위해 Route53에서 별도 도메인 생성 후 설치 간 환경변수로 추가하고 root의 초기 패스워드도 같이 설정합니다.  
    (미설정 시 설치 완료 후 /etc/gitlab/initial_root_password에서 확인해야합니다.)
-
-```shell
-sudo yum update
-sudo GITLAB_ROOT_PASSWORD='패스워드 입력' EXTERNAL_URL='https://gitlab.jjikin.com' yum install -y gitlab-ce
-```
-
+  ```shell
+  sudo yum update
+  sudo GITLAB_ROOT_PASSWORD='패스워드 입력' EXTERNAL_URL='https://gitlab.jjikin.com' yum install -y gitlab-ce
+  ```
 <br>
 
 6. 설치 완료까지 약간의 시간이 소요됩니다.
-
    ![image-20230715182731486](/assets/img/posts/image-20230715182731486.png)
-
+<br>
 7. 설정한 도메인 주소와 계정 정보로 GitLab에 접속합니다.
-
-![image-20230713211140295](/assets/img/posts/image-20230713211140295.png)
-
+	![image-20230713211140295](/assets/img/posts/image-20230713211140295.png)
 <br>
 
 ### 초기 설정
@@ -315,7 +304,11 @@ helm inspect values runatlantis/atlantis > atlantis_values.yaml
 
 
 
+<br>
 
+<br>
+
+<br>
 
 --- 이하 작성 중 ---
 
