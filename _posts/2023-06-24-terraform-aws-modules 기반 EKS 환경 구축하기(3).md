@@ -635,7 +635,7 @@ output "public_subnets" {
     instance_type = "t3.medium"
     instance_market_options { market_type = "spot" }
     key_name = module.key_pair.key_pair_name
-    vpc_security_group_ids = [aws_security_group.remote_access.id] # Cluster 보안그룹은 자동 Attach
+    vpc_security_group_ids = [module.eks.cluster_primary_security_group_id, aws_security_group.remote_access.id]
   
     block_device_mappings {
       device_name = "/dev/xvda"
