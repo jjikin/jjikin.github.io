@@ -1,36 +1,19 @@
 ---
-title: 2023-06-25-GitLab, Atlantis를 활용한 Terraform GitOps 환경 구축하기
-date: 2023-06-25 15:33:44 +09:00
+title: GitLab, Atlantis를 활용한 Terraform GitOps 환경 구축하기
+date: 2023-07-01 15:33:44 +09:00
 categories: [devops-study, git]
 tags: [git, gitlab, atlantis, gitops, terraform, iac]
 image: /assets/img/posts/image-20230711012040124.png
 ---
 
+GitLab과 Terraform Pull Request 과정을 자동화해주는 Atlantis를 활용하여 스터디 간 Terraform 코드에 대한 변경 이력 관리와 협업을 위한 GitOps 환경을 구축합니다. 
 
+<br>
 
-작성중...
-
-![image-20230711012040124](/assets/img/posts/image-20230711012040124.png)
-
-
-
-
-
-
-
-스터디간 Terraform 코드에 대한 변경 이력 관리와 협업을 위해 Terraform Pull Request 과정을 자동화해주는 
-Atlantis와 ~한 Gitlab을 통해 IaC 의 GitOps? CI/CD 환경을 구축합니다.
-
-
-
-Workflow 그려서 넣기
-
-각 어카운트간 연동은 취소되어 EKS Cluster를 public
+[Workflow 그려서 넣기]
 
 
 Pull Request는 변경사항에 대한 branch를 생성 후 검토 및 병합을 요청하는 것
-
-
 
 <br>
 
@@ -49,7 +32,7 @@ GitLab 설치에 필요한 최소 사양은 CPU 4Core + Mem 4GB 이상으로, �
 - AMI : Amazon Linux 2 (kernal 5.10.179-171.711.amzn2.x86_64)
 - Storage : 30GiB
 
-
+<br>
 
 ### 설치 방법
 
@@ -57,17 +40,17 @@ GitLab 설치에 필요한 최소 사양은 CPU 4Core + Mem 4GB 이상으로, �
 
 1. EC2 Instance 생성 시 설정한 보안그룹에 SSH 및 GitLab 접속을 위한 보안그룹 규칙을 설정합니다.
 
-   ![image-20230713202810944](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230713202810944.png)
+   ![image-20230713202810944](/assets/img/posts/image-20230713202810944.png)
 
    <br>
 
 2. EC2 Instance에 Elastic IP를 할당합니다.
 
-   ![image-20230715182553036](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230715182553036.png)
+   ![image-20230715182553036](/assets/img/posts/image-20230715182553036.png)
 <br>
 3. GitLab에 사용할 도메인을 생성합니다.
 
-![image-20230713201840303](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230713201840303.png)
+![image-20230713201840303](/assets/img/posts/image-20230713201840303.png)
 
 <br>
 
@@ -91,11 +74,11 @@ sudo GITLAB_ROOT_PASSWORD='패스워드 입력' EXTERNAL_URL='https://gitlab.jji
 
 6. 설치 완료까지 약간의 시간이 소요됩니다.
 
-   ![image-20230715182731486](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230715182731486.png)
+   ![image-20230715182731486](/assets/img/posts/image-20230715182731486.png)
 
 7. 설정한 도메인 주소와 계정 정보로 GitLab에 접속합니다.
 
-![image-20230713211140295](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230713211140295.png)
+![image-20230713211140295](/assets/img/posts/image-20230713211140295.png)
 
 <br>
 
@@ -105,13 +88,13 @@ sudo GITLAB_ROOT_PASSWORD='패스워드 입력' EXTERNAL_URL='https://gitlab.jji
 
    사용할 신규 User를 생성한 후 로그인 합니다. 패스워드의 경우 존재하지 않는 email을 사용했으므로 계정 생성 후 별도로 변경했습니다.
 
-![image-20230713211815781](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230713211815781.png)
+![image-20230713211815781](/assets/img/posts/image-20230713211815781.png)
 
 <br>
 
 2. Private Project 생성
 
-![image-20230713212228814](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230713212228814.png)
+![image-20230713212228814](/assets/img/posts/image-20230713212228814.png)
 
 <br>
 
@@ -119,9 +102,9 @@ sudo GITLAB_ROOT_PASSWORD='패스워드 입력' EXTERNAL_URL='https://gitlab.jji
 
    Atlantis 사용 간 혼선을 막기 위해 Atlantis용 User를 생성한 후 Project에 초대합니다.
 
-   ![image-20230715183338279](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230715183338279.png)
+   ![image-20230715183338279](/assets/img/posts/image-20230715183338279.png)
    
-   ![image-20230713214915587](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230713214915587.png)
+   ![image-20230713214915587](/assets/img/posts/image-20230713214915587.png)
 
 <br>
 
@@ -129,7 +112,7 @@ sudo GITLAB_ROOT_PASSWORD='패스워드 입력' EXTERNAL_URL='https://gitlab.jji
 
    프로젝트 선택 - Settings - Access Token에서 아래와 같이 입력 후 토큰을 생성하면 상단에 토근값이 출력되며 기록해둡니다.
 
-   ![image-20230713215855683](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230713215855683.png)
+   ![image-20230713215855683](/assets/img/posts/image-20230713215855683.png)
 
 <br>
 
@@ -206,7 +189,7 @@ module "ebs_csi_driver_irsa_role" {
 3. Webhook 설정
 
    생성한 Secret Token을 포함하여 Webhook을 보낼 Atlantis URL과 트리거를 입력합니다.
-   ![image-20230715194410691](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230715194410691.png)
+   ![image-20230715194410691](/assets/img/posts/image-20230715194410691.png)
 
 <br>
 
