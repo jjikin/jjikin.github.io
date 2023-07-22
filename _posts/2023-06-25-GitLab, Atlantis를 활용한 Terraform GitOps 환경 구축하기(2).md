@@ -10,6 +10,7 @@ image: /assets/img/posts/image-20230711012040124.png
 
 ## Pull Request 
 
+GitLab Repository에 소스 코드를 업로드 했다면 아래와 같이 `Create merge request` 팝업을 확인할 수 있으며, 클릭하여 Pull Request를 진행해보겠습니다.
 ![image-20230716035422517](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230716035422517.png)
 
 
