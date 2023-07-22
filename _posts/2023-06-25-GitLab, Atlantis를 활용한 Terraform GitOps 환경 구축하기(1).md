@@ -1,7 +1,7 @@
 ---
 title: GitLab, Atlantis를 활용한 Terraform GitOps 환경 구축하기(1)
 date: 2023-06-25 15:33:44 +09:00
-categories: [devops-study, gitlab, atlantis, gitpos, terraform]
+categories: [devops-study]
 tags: [gitlab, atlantis, gitops, terraform, iac]
 image: /assets/img/posts/image-20230711012040124.png
 ---
@@ -10,12 +10,14 @@ GitLab과 Terraform Pull Request 과정을 자동화해주는 Atlantis를 활용
 
 {: .prompt-info }
 
-  > Pull Request란?  
+  > Pull Request(PR)란?  
   > 코드 변경 사항에 대한 branch를 생성하여 팀원들에게 검토 후 main branch에 병합을 요청하는 절차
 
 <br>
 
-[Workflow 그려서 넣기]
+Terraform GitOps Workflow
+
+![image-20230722191219137](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230722191219137.png)
 
 <br>
 

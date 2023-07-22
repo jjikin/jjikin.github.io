@@ -2,7 +2,7 @@
 
 title: GitLab, Atlantis를 활용한 Terraform GitOps 환경 구축하기(2)
 date: 2023-07-02 15:33:44 +09:00
-categories: [devops-study, gitlab, atlantis, gitpos, terraform]
+categories: [devops-study]
 tags: [gitlab, atlantis, gitops, terraform, iac]
 image: /assets/img/posts/image-20230711012040124.png
 ---
@@ -122,7 +122,8 @@ PR의 제목과 설명, 검토자 등을 설정 후 생성합니다.
 
 <br>
 
-Comment에 대해 Atlantis Bot이 정상적으로 응답하고 있음을 확인할 수 있습니다. (GitLab User로 AtlantisBot이 자동 생성됩니다.)
+Comment에 대해 Atlantis Bot이 정상적으로 응답하고 있음을 확인할 수 있습니다.  
+(GitLab User로 AtlantisBot이 자동 생성됩니다.)
 
 ![image-20230722161207871](/assets/img/posts/image-20230722161207871.png)
 
@@ -140,11 +141,65 @@ Comment에 대해 Atlantis Bot이 정상적으로 응답하고 있음을 확인�
 
 <br>
 
-Atlantis Web에서는 `atlantis plan/apply` 간 S3에 저장된 상태파일에 대한 Locking 여부 확인이 가능합니다.
+Atlantis Web에서는 `atlantis plan/apply` 간 S3에 저장된 상태 파일에 대한 Locking 여부 확인이 가능합니다.
 
 ![image-20230716024957121](/assets/img/posts/image-20230716024957121.png)
 
 <br>
+
+Altantis에서 상태 파일에 대한 Lock을 지원하므로 EKS 구축 시 S3 상태파일 Lock을 위해 생성했던 DynamoDB 리소스를 삭제합니다.
+
+```hcl
+# ~/backend/init.tf
+module "dynamodb_table" {   # 삭제
+  source   = "terraform-aws-modules/dynamodb-table/aws"
+
+  name     = "devops-table-tfstate"
+  hash_key = "LockID"
+  billing_mode = "PAY_PER_REQUEST"  # On-demand, 요청만큼만 지불하는 방식
+  attributes = [
+    {
+      name ="LockID"
+      type = "S"  # String
+    }
+  ]
+}
+```
+
+```hcl
+# ~/infra/eks.tf
+...
+data "terraform_remote_state" "remote" { # VPC State를 가져온다.
+  backend = "s3"
+  config = {
+    profile        = "devops"
+    bucket         = "devops-s3-tfstate"
+    key            = "devops/terraform.tfstate"
+    #dynamodb_table = "devops-table-tfstate"   # 삭제
+    region         = "ap-northeast-2"
+  }
+
+  depends_on = [module.vpc]
+}
+...
+```
+
+```hcl
+# ~/infra/main.tf
+...
+  backend "s3" {
+    #profile        = "devops"
+    bucket         = "devops-s3-tfstate"
+    key            = "devops/terraform.tfstate"
+    #dynamodb_table = "devops-table-tfstate"   # 삭제
+    region         = "ap-northeast-2"
+    encrypt        = true
+  }
+}
+...
+```
+
+
 
 <br>
 
