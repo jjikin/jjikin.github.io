@@ -144,7 +144,7 @@ locals {
   vpc_id            = module.vpc.vpc_id
   subnet_ids        = module.vpc.public_subnets
   external_dns_arn  = "arn:aws:route53:::hostedzone/Z08574211BOF867DLRAI2"  # 개인용 Route53 HostingZone
-  external_cert_arn = "arn:aws:acm:us-east-1:371604478497:certificate/725fd9d7-5e31-4750-a161-4f67cd6bb9f0"
+  external_cert_arn = "arn:aws:acm:us-east-1:111111111111:certificate/725fd9d7-5e31-4750-a161-4f67cd6bb9f0"
   tags = {
     CreatedBy = "Terraform"
   }
@@ -260,7 +260,7 @@ locals {
   vpc_id            = data.terraform_remote_state.remote.outputs.vpc_id
   subnet_ids        = data.terraform_remote_state.remote.outputs.public_subnets
   external_dns_arn  = "arn:aws:route53:::hostedzone/Z08574211BOF867DLRAI2"  # 개인용 Route53 HostingZone
-  external_cert_arn = "arn:aws:acm:us-east-1:371604478497:certificate/725fd9d7-5e31-4750-a161-4f67cd6bb9f0"
+  external_cert_arn = "arn:aws:acm:us-east-1:111111111111:certificate/725fd9d7-5e31-4750-a161-4f67cd6bb9f0"
   tags = {
     CreatedBy = "Terraform"
   }
@@ -607,7 +607,7 @@ EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마�
    $ brew install hashicorp/tap/terraform
    ```
 
-2. AWS Configure 명령어를 통해 프로파일 추가
+2. aws configure 명령어를 통해 프로파일 추가
    ```shell
    $ aws configure --profile devops
    AWS Access Key ID [None]: ******
@@ -667,3 +667,7 @@ EKS에서 제공하는 서비스는 Weaveworks에서 무료로 제공하는 마�
 4. backend 디렉토리에서 생성한 인프라를 삭제합니다.  
    `terraform destroy --auto-approve`
 
+<br>
+<br>
+
+다음 포스트 [2023-06-18-terraform-aws-modules 기반 EKS 환경 구축하기(2)](https://jjikin.com/posts/terraform-aws-modules-%EA%B8%B0%EB%B0%98-EKS-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(2)/)에서 이어집니다.

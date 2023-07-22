@@ -11,7 +11,7 @@ GitLab과 Terraform Pull Request 과정을 자동화해주는 Atlantis를 활용
 {: .prompt-info }
 
   > Pull Request란?  
-  > 코드 변경 사항에 대한 branch를 생성하여 팀원들에게 검토 후 main branch에 병합을 요청하는 것
+  > 코드 변경 사항에 대한 branch를 생성하여 팀원들에게 검토 후 main branch에 병합을 요청하는 절차
 
 <br>
 
@@ -81,7 +81,7 @@ GitLab 설치에 필요한 최소 사양은 CPU 4Core + Mem 4GB 이상으로, �
 
 <br>
 
-### Atlantis 연동을 위한 설정
+### Atlantis 연동을 위한 사전 설정
 
 1. Atlantis에서 GitLab API 호출을 위한 Access Token을 생성합니다.  
    프로젝트 선택 - Settings - Access Token에서 아래와 같이 입력 후 토큰을 생성하면 상단에 토근값이 출력되며 기록해둡니다.
@@ -115,7 +115,7 @@ Atlantis는 Pull Request를 통해 Terraform Workflow를 자동화해주는 오�
 
 <br>
 
-### 사전 설정
+### 설치를 위한 사전 설정
 
 - Atlantis는 PV를 사용하므로 ebs-csi-driver Add-on 설치가 필요합니다. 아래와 같이 코드 추가 후 재배포 합니다.
   
@@ -246,7 +246,7 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
        mount: true
        name: runatlantis
        annotations: 
-         eks.amazonaws.com/role-arn: "arn:aws:iam::371604478497:role/devops-atlantis-role" # 직접 설정 필요
+         eks.amazonaws.com/role-arn: "arn:aws:iam::111111111111:role/devops-atlantis-role" # 직접 설정 필요
      ```
      <br>
 4. Atlantis 파드가 Terraform Code를 통해 Plan/Apply하기 위해서는 IRSA가 필요합니다.  
@@ -356,5 +356,6 @@ GitLab 구성 시 생성한 Repository에는 아직 아무 코드도 없으므�
    ```
 
 <br>
+<br>
 
-다음 포스트에서는 Pull Request 및 
+다음 포스트 [GitLab, Atlantis를 활용한 Terraform GitOps 환경 구축하기(2)](https://jjikin.com/posts/GitLab,-Atlantis%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-Terraform-GitOps-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(2)/)에서 이어집니다.

@@ -1,4 +1,5 @@
 ---
+
 title: GitLab, Atlantis를 활용한 Terraform GitOps 환경 구축하기(2)
 date: 2023-07-02 15:33:44 +09:00
 categories: [devops-study, gitlab, atlantis, gitpos, terraform]
@@ -10,10 +11,141 @@ image: /assets/img/posts/image-20230711012040124.png
 
 ## Pull Request 
 
-GitLab Repository에 소스 코드를 업로드 했다면 아래와 같이 `Create merge request` 팝업을 확인할 수 있으며, 클릭하여 Pull Request를 진행해보겠습니다.
+### 사전 설정
+
+기존의 Terraform Code를 배포하는 환경은 로컬PC에서 이루어지도록 구성되어 있습니다.  
+따라서 정상적으로 Atlantis에서 Terraform Code를 배포하기 위해서는 몇 가지 설정 사항들을 변경해야합니다.
+
+1. `infra` 코드 내 `profile` 옵션 주석 처리  
+   기존 코드 배포는 로컬 PC에 `aws configure` 명령어를 통해 추가한 프로파일을 기반으로 Terraform Code 내 `profile` 옵션을 통해 AWS 리소스를 생성하도록 구성되어 있었습니다.  
+   `profile` 옵션을 주석처리하여 Atlantis Pod가 가지고 있는 IRSA의 권한을 기반으로 코드 배포를 진행하도록 변경합니다.
+
+   ```hcl
+   # eks.tf
+   ...
+   ata "terraform_remote_state" "remote" { # VPC State를 가져온다.
+     backend = "s3"
+     config = {
+       #profile        = "devops"   # 주석 처리
+       bucket         = "devops-s3-tfstate"
+       key            = "devops/terraform.tfstate"
+       dynamodb_table = "devops-table-tfstate"
+       region         = "ap-northeast-2"
+     }
+   ...
+   ```
+
+   ```hcl
+   # main.tf
+   provider "aws" {
+     #profile = "devops"   # 주석 처리
+     region = "ap-northeast-2"
+   }
+   ...
+   ```
+
+   <br>
+
+2. KMS CMK 권한 변경
+   k8s etcd 암복호화를 위한 권한을 위해 CMK 키 관리자를 변경해야 합니다. 기존 프로파일로 설정되어있는 키 관리자를 Atlantis가 사용하는 Role로 변경합니다.
+
+   ```json
+   {
+       "Version": "2012-10-17",
+       "Statement": [
+           {
+               "Sid": "KeyAdministration",
+               "Effect": "Allow",
+               "Principal": {
+                   "AWS": "arn:aws:iam::111111111111:user/ljy"   # 삭제
+                   "AWS": "arn:aws:iam::111111111111:role/devops-eks-atlantis-role"   # 추가             
+               },
+               "Action": [
+   						...
+   ```
+
+   <br>
+
+3. configmap `aws-auth` 에 Role 추가
+   Atlantis Pod에 부여된 `devops-eks-atlantis-role`을 통해 k8s 내 리소스를 생성 및 변경할 수 있도록 권한을 부여합니다.
+
+   ```yaml
+   # aws-auth configmap
+   apiVersion: v1
+   data:
+     mapAccounts: |
+       []
+     mapRoles: |   # 추가
+       - rolearn : arn:aws:iam::111111111111:role/devops-eks-atlantis-role
+         username : atlantis
+         groups :
+           - system:masters
+     mapUsers: |
+   	- userARN: arn:aws:iam::111111111111:user/hunine8
+         username: devops-admin
+         groups:
+         - system:masters
+     ...
+   ```
+
+
+
+<br>
+
+<br>
+
+### 테스트
+
+GitLab Repository에 소스 코드를 업로드한 직후 아래와 같이 GitLab Repository 상단에서 `Create merge request` 팝업을 확인할 수 있으며, 클릭하여 Pull Request를 진행합니다.
 ![image-20230716035422517](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230716035422517.png)
 
+{: .prompt-info }
 
+> Pull Request와 Merge Request의 차이  
+> Pull Request는 GitHub에서, Merge Request는 GitLab에서 사용하는 용어로 같은 의미로 쓰입니다.
+
+<br>
+
+PR의 제목과 설명, 검토자 등을 설정 후 생성합니다.
+
+![image-20230722160553516](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230722160553516.png)
+
+<br>
+
+팀원으로부터 Merge를 승인 받았다면 Atlantis가 정상적으로 연동되어있는지 확인하기위해 Activity 탭에 `atlantis help` 명령어를 Comment로 작성합니다.  
+(👀 이모티콘 확인)
+
+![image-20230722161032346](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230722161032346.png)
+
+<br>
+
+Comment에 대해 Atlantis Bot이 정상적으로 응답하고 있음을 확인할 수 있습니다. (GitLab User로 AtlantisBot이 자동 생성됩니다.)
+
+![image-20230722161207871](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230722161207871.png)
+
+<br>
+
+`atlantis plan` 을 실행한 후 이상 없음을 확인합니다.
+
+![image-20230722163009998](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230722163009998.png)
+
+<br>
+
+`atlantis apply` 명령어를 실행하여 적용합니다.
+
+![image-20230722163438878](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230722163438878.png)
+
+<br>
+
+Atlantis Web에서는 `atlantis plan/apply` 간 S3에 저장된 상태파일에 대한 Locking 여부 확인이 가능합니다.
+
+![image-20230716024957121](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230716024957121.png)
+
+<br>
+
+<br>
+
+다음 포스트 [GitLab, Atlantis를 활용한 Terraform GitOps 환경 구축하기(3)](https://jjikin.com/posts/GitLab,-Atlantis%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-Terraform-GitOps-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0(3)/)에서 이어집니다.
 
 
 
@@ -309,7 +441,7 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
        mount: true
        name: runatlantis
        annotations: 
-         eks.amazonaws.com/role-arn: "arn:aws:iam::371604478497:role/devops-atlantis-role" # 직접 설정 필요
+         eks.amazonaws.com/role-arn: "arn:aws:iam::111111111111:role/devops-atlantis-role" # 직접 설정 필요
      ```
      
    - 이외 추가할 변수들은 [링크](https://github.com/runatlantis/helm-charts#customization)를 통해 확인 후 추가 및 변경합니다.
@@ -367,7 +499,7 @@ altantis에 설정한 IRSA 은 ? -> atlantis-pod에다가 Admin 권한을 준 �
 실행 후 에러 발생
 
 ```plaintext
-│ Error: reading KMS Key (77270bdb-91e1-4576-ae99-46bcffb63a3a): reading KMS Key (77270bdb-91e1-4576-ae99-46bcffb63a3a): AccessDeniedException: User: arn:aws:sts::371604478497:assumed-role/devops-eks-atlantis-role/1689432777102819771 is not authorized to perform: kms:DescribeKey on resource: arn:aws:kms:ap-northeast-2:371604478497:key/77270bdb-91e1-4576-ae99-46bcffb63a3a because no resource-based policy allows the kms:DescribeKey action
+│ Error: reading KMS Key (77270bdb-91e1-4576-ae99-46bcffb63a3a): reading KMS Key (77270bdb-91e1-4576-ae99-46bcffb63a3a): AccessDeniedException: User: arn:aws:sts::111111111111:assumed-role/devops-eks-atlantis-role/1689432777102819771 is not authorized to perform: kms:DescribeKey on resource: arn:aws:kms:ap-northeast-2:111111111111:key/77270bdb-91e1-4576-ae99-46bcffb63a3a because no resource-based policy allows the kms:DescribeKey action
 │ 	status code: 400, request id: dc59db19-6d9b-4ed7-adfd-22645248b6a6
 │ 
 │   with module.eks.module.kms.aws_kms_key.this[0],
@@ -386,7 +518,7 @@ kms 키 정책 확인 후 변경 -> root 로
             "Sid": "KeyAdministration",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::371604478497:user/ljy"
+                "AWS": "arn:aws:iam::111111111111:user/ljy"
             },
 
 
@@ -414,9 +546,9 @@ data:
     - "groups":
       - "system:bootstrappers"
       - "system:nodes"
-      "rolearn": "arn:aws:iam::371604478497:role/devops-eks-node-role"
+      "rolearn": "arn:aws:iam::111111111111:role/devops-eks-node-role"
       "username": "system:node:{{EC2PrivateDNSName}}"
-    - rolearn : arn:aws:iam::371604478497:role/devops-eks-atlantis-role
+    - rolearn : arn:aws:iam::111111111111:role/devops-eks-atlantis-role
       username : atlantis
       groups :
         - system:masters
@@ -438,7 +570,7 @@ apply 성공.
 
 ![image-20230716024854068](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230716024854068.png)
 
-![image-20230716024957121](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230716024957121.png)
+
 
 --- 이하 작성 중 ---
 
@@ -579,7 +711,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::371604478497:role/devops-eks-ebs_csi_driver-role
+    eks.amazonaws.com/role-arn: arn:aws:iam::111111111111:role/devops-eks-ebs_csi_driver-role
   creationTimestamp: "2023-06-25T15:18:26Z"
   labels:
     app.kubernetes.io/component: csi-driver
@@ -599,7 +731,7 @@ automountServiceAccountToken: true
 kind: ServiceAccount
 metadata:
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::371604478497:role/devops-eks-ebs_csi_driver-role
+    eks.amazonaws.com/role-arn: arn:aws:iam::111111111111:role/devops-eks-ebs_csi_driver-role
   creationTimestamp: "2023-06-25T15:15:58Z"
   name: aws-ebs-csi-driver
   namespace: kube-system
@@ -675,11 +807,11 @@ data:
   mapRoles: |
     ...
   mapUsers: |
-	- userARN: arn:aws:iam::371604478497:user/hunine83@gmail.com
+	- userARN: arn:aws:iam::111111111111:user/hunine83@gmail.com
       username: devops-admin-1
       groups:
       - system:masters
-    - userARN: arn:aws:iam::371604478497:user/andy741023@gmail.com
+    - userARN: arn:aws:iam::111111111111:user/andy741023@gmail.com
       username: devops-admin-2
       groups:
       - system:masters
