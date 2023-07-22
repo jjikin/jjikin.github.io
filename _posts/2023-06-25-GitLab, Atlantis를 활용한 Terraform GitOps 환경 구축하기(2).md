@@ -1,10 +1,72 @@
 ---
-title: GitLab, Atlantis를 활용한 Terraform GitOps 환경 구축하기
-date: 2023-07-01 15:33:44 +09:00
+title: GitLab, Atlantis를 활용한 Terraform GitOps 환경 구축하기(2)
+date: 2023-07-02 15:33:44 +09:00
 categories: [devops-study, gitlab, atlantis, gitpos, terraform]
 tags: [gitlab, atlantis, gitops, terraform, iac]
 image: /assets/img/posts/image-20230711012040124.png
 ---
+
+
+
+## Pull Request 
+
+![image-20230716035422517](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230716035422517.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 GitLab과 Terraform Pull Request 과정을 자동화해주는 Atlantis를 활용하여 스터디 간 Terraform 코드에 대한 변경 이력 관리와 협업을 위한 GitOps 환경을 구축합니다. 
 
@@ -239,7 +301,6 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
        storageClassName: gp2
      ```
      
-   
    - ServiceAccount 설정
      ```yaml
      serviceAccount:
@@ -250,10 +311,9 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
          eks.amazonaws.com/role-arn: "arn:aws:iam::371604478497:role/devops-atlantis-role" # 직접 설정 필요
      ```
      
-   
    - 이외 추가할 변수들은 [링크](https://github.com/runatlantis/helm-charts#customization)를 통해 확인 후 추가 및 변경합니다.
+
 <br>
-   
 4. Helm을 통한 배포
    ```bash
    kubectl create namespace atlantis
