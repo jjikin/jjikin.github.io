@@ -10,7 +10,7 @@ GitLab과 Terraform Pull Request 과정을 자동화해주는 Atlantis를 활용
 
 {: .prompt-info }
 
-  > Pull Request란?
+  > Pull Request란?  
   > 코드 변경 사항에 대한 branch를 생성하여 팀원들에게 검토 후 main branch에 병합을 요청하는 것
 
 <br>
@@ -24,7 +24,7 @@ GitLab과 Terraform Pull Request 과정을 자동화해주는 Atlantis를 활용
 GitLab은 지속적 통합/지속적 배포(CI/CD) 및 협업을 위한 여러 기능들을 제공하는 웹 기반 DevOps 플랫폼입니다.  
 GitLab Community Edition은 오픈소스로 무료로 사용할 수 있고, SaaS형이 아닌 자체적으로 설치(Self-Managed)해서 사용할 수 있기에 선택하게 되었습니다.
 
-
+<br>
 
 ### 설치 사양
 
@@ -57,7 +57,6 @@ GitLab 설치에 필요한 최소 사양은 CPU 4Core + Mem 4GB 이상으로, �
    curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
    ```
    <br>
-
 5. Route53에서 추가한 레코드와 root의 초기 패스워드를 환경변수로 추가하여 설치합니다.  
    (패스워드 미설정 시 설치 완료 후 /etc/gitlab/initial_root_password에서 확인해야합니다.)
    ```shell
@@ -65,7 +64,6 @@ GitLab 설치에 필요한 최소 사양은 CPU 4Core + Mem 4GB 이상으로, �
    sudo GITLAB_ROOT_PASSWORD='패스워드 입력' EXTERNAL_URL='https://gitlab.jjikin.com' yum install -y gitlab-ce
    ```
     <br>
-
 6. 설치 완료까지 약간의 시간이 소요됩니다.
    ![image-20230715182731486](/assets/img/posts/image-20230715182731486.png)
    <br>
@@ -85,22 +83,24 @@ GitLab 설치에 필요한 최소 사양은 CPU 4Core + Mem 4GB 이상으로, �
 
 ### Atlantis 연동을 위한 설정
 
-1. Atlantis에서 GitLab API 호출을 위한 Access Token 생성  
+1. Atlantis에서 GitLab API 호출을 위한 Access Token을 생성합니다.  
    프로젝트 선택 - Settings - Access Token에서 아래와 같이 입력 후 토큰을 생성하면 상단에 토근값이 출력되며 기록해둡니다.
    ![image-20230713215855683](/assets/img/posts/image-20230713215855683.png)
    <br>
 
 2. Secret 생성  
    GitLab으로부터 수신한 Webhook이 올바른 요청인지 확인하기 위한 Secret Token을 생성해야합니다. 공식 문서에서 제공한 [링크](https://www.browserling.com/tools/random-string)에서 아래 설정으로 Random String을 생성합니다.
+   
    - Format : a-zA-Z mixed case
    
    - Length : 32~128
-
-{: .prompt-warning }
-> String에 특수문자가 있거나 28문자보다 짧을 경우 400 Error(Unauthorized & did not match expected secret)가 발생할 수 있습니다.
-<br>
-
-3. Webhook 설정  
+   
+     {: .prompt-warning }
+   
+     > String에 특수문자가 있거나 28문자보다 짧을 경우 400 Error(Unauthorized & did not match expected secret)가 발생할 수 있습니다.
+     > <br>
+   
+2. Webhook 설정  
    생성한 Secret Token을 포함하여 Webhook을 보낼 Atlantis URL과 트리거를 입력합니다.
    ![image-20230715194410691](/assets/img/posts/image-20230715194410691.png)
    <br>
@@ -111,7 +111,7 @@ GitLab 설치에 필요한 최소 사양은 CPU 4Core + Mem 4GB 이상으로, �
 ## Atlantis
 
 Atlantis는 Pull Request를 통해 Terraform Workflow를 자동화해주는 오픈소스 Tool입니다.  
-앞으로 진행될 스터디에서 팀원들 간 EKS를 구성하는 Terraform Code의 관리와 협업을 위해 꼭 필요한 툴이기에 선택하였으며, EKS 내 설치합니다.
+앞으로 진행될 스터디에서 팀원들 간 EKS를 구성하는 Terraform Code의 관리와 협업을 위해 꼭 필요한 툴이기에 선택하였습니다.
 
 <br>
 
@@ -167,14 +167,12 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
    ```shell
    helm repo add runatlantis https://runatlantis.github.io/helm-charts
    ```
-   <br>
-
+   
 2. Access Token, Secret 설정을 위한 values.yaml 생성
    ```
    helm inspect values runatlantis/atlantis > atlantis_values.yaml
    ```
-   <br>
-
+   
 3. atlantis_value.yaml 파일을 수정합니다.
 
    - Webhook를 허용할 리포지토리를 입력합니다.
@@ -182,8 +180,7 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
    # Replace this with your own repo allowlist:
    orgAllowlist: gitlab.jjikin.com/jjikin/devops  # {hostname}/{owner}/{repo}
    ```
-   <br>
-
+   
    - GitLab 연동을 위한 정보를 입력합니다.
    ```yaml
    # If using GitLab, specify like the following:
@@ -194,19 +191,16 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
    # GitLab Enterprise only:
      hostname: https://gitlab.jjikin.com
    ```
-   <br>
-
+   
    - Atlantis에 로그인하기 위한 계정 정보를 설정합니다.
    ```yaml
    basicAuth: # atlantis account info
      username: "atlantis"
      password: "atlantis"
    ```
-   <br>
-
+   
    - ingress 설정  
      Atlantis만을 위한 별도의 ALB 생성은 불필요하므로, 내부 서비스 `sockshop` 생성 시 같이 생성했던 ALB를 사용합니다.
-     
      ```yaml
      ingress:
        enabled: true
@@ -234,11 +228,9 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
        labels: {}
      
      ```
-     <br>
-   
+     
    - PV 설정  
      Atlanstis는 `Terraform init` 실행 시 필요한 Module을 PV에 저장합니다. 모듈 용량이 클 경우 용량 부족으로 에러가 발생할 수 있으므로 디스크 용량을 적절하게 부여해야합니다.
-   
      ```yaml
      volumeClaim:
        enabled: true
@@ -246,7 +238,7 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
        dataStorage: 20Gi
        storageClassName: gp2
      ```
-     <br>
+     
    
    - ServiceAccount 설정
      ```yaml
@@ -257,10 +249,10 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
        annotations: 
          eks.amazonaws.com/role-arn: "arn:aws:iam::371604478497:role/devops-atlantis-role" # 직접 설정 필요
      ```
-     <br>
+     
    
    - 이외 추가할 변수들은 [링크](https://github.com/runatlantis/helm-charts#customization)를 통해 확인 후 추가 및 변경합니다.
-     <br>
+<br>
    
 4. Helm을 통한 배포
    ```bash
