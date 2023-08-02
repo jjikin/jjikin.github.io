@@ -1,7 +1,7 @@
 ---
 title: GitLab, Atlantis를 활용한 Terraform GitOps 환경 구축하기(1)
 date: 2023-06-25 15:33:44 +09:00
-categories: [devops-study]
+categories: [DevOps, atlantis, gitlab]
 tags: [gitlab, atlantis, gitops, terraform, iac]
 image: /assets/img/posts/image-20230711012040124.png
 ---
@@ -16,6 +16,8 @@ GitLab과 Terraform Pull Request 과정을 자동화해주는 Atlantis를 활용
 <br>
 
 Terraform GitOps Workflow
+
+구성할 GitOps 환경의 Workflow를 그려보았습니다.
 
 ![image-20230722191219137](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230722191219137.png)
 

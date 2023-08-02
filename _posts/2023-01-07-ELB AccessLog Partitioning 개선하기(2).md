@@ -10,7 +10,7 @@ image:
 # https://chirpy.cotes.page/posts/text-and-typography/
 ---
 
-이전 포스트 [LoadBalancer AccessLog Partitioning 개선하기 (1)](https://www.jjikin.com/topic/aws/improve_loadbalancer_accesslog_partitioning_1)에서 이어지는 포스트입니다.
+이전 포스트 [LoadBalancer AccessLog Partitioning 개선하기 (1)](https://jjikin.com/posts/ELB-AccessLog-Partitioning-개선하기(1))에서 이어지는 포스트입니다.
 
 <br>
 
@@ -69,8 +69,9 @@ image:
    AWS Athena에서는 일반적으로 쿼리를 처리할 때 내부적으로 AWS Glue Data Catalog에 대한 `GetPartitions` 호출을 수행합니다. 이 때 테이블에 많은 수의 파티션이 있는 경우 쿼리 성능에 부정적인 영향을 줄 수 있습니다. 
 
    또한 `MSCK REPAIR TABLE` 쿼리의 경우 대규모의 파티션이 생성된 상황에서 사용하는 경우 시간 초과 문제로 인해 정상적으로 업데이트가 이루어지지 않는 문제가 발생할 수 있습니다.
-
-<img src="/assets/img/posts/image-20230802153547770.png" alt="SHOW PARTITIONS alb_logs; 쿼리 결과" alt="SHOW PARTITIONS alb_logs; 쿼리 결과" />
+   
+   ![Untitled](/assets/img/posts/image-20230107153547770.png)
+   _SHOW PARTITIONS alb_logs; 쿼리 결과_
 
 <br>
 
@@ -145,10 +146,10 @@ image:
 - 파티션 프로젝션이 지원하는 삽입 형식(injected) 사용
   테이블 생성 시 정의한 TBLPROPERTIES 내 injected 타입을 가지는 Column은 쿼리 실행 시 WHERE 절에 조건식이 제공되지 않으면 쿼리에 실패합니다.
 
-  ![Untitled](/assets/img/posts/image-20230802153547771.png)
+  ![Untitled](/assets/img/posts/image-20230107153547771.png)
   
   
   
   따라서 아래와 같이 반드시 alb_name를 명시해야합니다.
 
-![Untitled](/assets/img/posts/image-20230802153547772.png)
+![Untitled](/assets/img/posts/image-20230107153547772.png)
