@@ -1,5 +1,5 @@
 ---
-title: ALB Access Log 파티셔닝 적용하기
+title: ELB AccessLog Partitioning 적용하기
 date: 2022-07-30 00:00:00 +09:00
 categories: [AWS, ELB]
 tags: [aws, elb, alb, accesslog, athena, partitoning]
