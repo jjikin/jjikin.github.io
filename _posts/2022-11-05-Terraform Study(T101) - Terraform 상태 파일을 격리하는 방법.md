@@ -167,12 +167,12 @@ Terraform에서는 상태를 구분하여 저장할 수 있는 작업 공간을 
   	mywork1
   ```
 
-  ![mywork1 생성 후 결과](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221105200109380.png)
+  ![mywork1 생성 후 결과](/assets/img/posts/image-20221105200109380.png)
   _mywork1 생성 후 결과_
 
   <br>
   
-  ![mywork2 생성 후 결과](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221105200109381.png)
+  ![mywork2 생성 후 결과](/assets/img/posts/image-20221105200109381.png)
   _mywork2 생성 후 결과_
   
   <br>
@@ -535,7 +535,7 @@ Terraform에서는 상태를 구분하여 저장할 수 있는 작업 공간을 
 
 - **Error #1** : `terraform plan` 시 아래와 같은 에러가 발생합니다.
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221105200109382.png)
+  ![Untitled](/assets/img/posts/image-20221105200109382.png)
 
   두 서브넷과 VPC 기존 ~/vpc/main.tf에서 정의한 리소스지만 ~/db/mysql/main.tf와는 별도의 폴더로 분리되어있는 상태, 즉 `.tfstate` 가 다르기 때문에 참조할 수 없어 발생하는 에러입니다.
 
@@ -630,13 +630,13 @@ Terraform에서는 상태를 구분하여 저장할 수 있는 작업 공간을 
 
   정상적으로 vpc 리소스들을 참조하여 RDS가 생성되었습니다.
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221105200109383.png)
+  ![Untitled](/assets/img/posts/image-20221105200109383.png)
 
   <br>
 
 - **Error #2** : AWS profile을 이용하여 S3 Backend 접근 시 STS Token 관련 에러가 발생했습니다.
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221105200109384.png)
+  ![Untitled](/assets/img/posts/image-20221105200109384.png)
 
   아래와 같이 프로파일을 추가했음에도 기본 자격 증명을 사용하여 접근을 시도합니다.
 
@@ -993,7 +993,7 @@ while true; do curl --connect-timeout 1  http://$ALBDNS:8080 ; echo; echo "-----
 curl -s http://$ALBDNS:8080
 ```
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221105200109385.png)
+![Untitled](/assets/img/posts/image-20221105200109385.png)
 
 {: .prompt-tip }
 

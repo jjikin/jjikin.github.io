@@ -101,9 +101,9 @@ aws iam list-users | jq
 terraform destroy -auto-approve
 ```
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221117204201270.png)
+![Untitled](/assets/img/posts/image-20221117204201270.png)
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221117204201271.png)
+![Untitled](/assets/img/posts/image-20221117204201271.png)
 
 <br>
 
@@ -700,7 +700,7 @@ terraform destroy -auto-approve
   terraform plan
   ```
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221117204201272.png)
+  ![Untitled](/assets/img/posts/image-20221117204201272.png)
 
   {: .prompt-danger }
 
@@ -736,7 +736,7 @@ terraform destroy -auto-approve
   terraform plan && terraform apply -auto-approve
   ```
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221117204201273.png)
+  ![Untitled](/assets/img/posts/image-20221117204201273.png)
 
   apply 및 서비스가 정상적으로 실행되었음을 확인할 수 있습니다.
 
@@ -765,7 +765,7 @@ terraform destroy -auto-approve
 
   services 리소스 apply 과정에서 아래와 같이 AWS 리소스 이름이 모듈 내에 하드코딩되어 있어 중복 에러가 발생합니다.
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221117204201274.png)
+  ![Untitled](/assets/img/posts/image-20221117204201274.png)
 
   이를 위해서는 모듈 내에 입력 변수를 활용하여 stage/prod 간 환경을 구분하도록 설정해줘야 합니다.
 

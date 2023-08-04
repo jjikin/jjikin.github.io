@@ -45,7 +45,7 @@ resource "aws_iam_user" "count_user" {
 }
 ```
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221120224702940.png)
+![Untitled](/assets/img/posts/image-20221120224702940.png)
 
 따라서 count를 사용할 때는 사용하려는 블록(리소스 등)에 대한 이해가 반드시 필요합니다.
 
@@ -88,7 +88,7 @@ output "all_arns" {
 - **length 함수(내장)** - 주어진 값의 항목 수를 반환하는 함수. 배열, 문자열 및 맵을 대상으로 사용 가능합니다.
 - IAM 사용자 전체의 ARN 출력을 위해서는 인덱스 대신 스플랫 splat 연산자인 * 를 사용합니다.
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221120224702941.png)
+![Untitled](/assets/img/posts/image-20221120224702941.png)
 
 <br>
 
@@ -143,7 +143,7 @@ output "all_arns" {
 
    하지만 테라폼은 jjikin 유저를 삭제하고 radish 유저를 다시 생성하려고 시도하며, radish 유저는 이미 존재하므로 에러가 발생합니다. 인덱스는 단순히 값이 있는 순서만 나타낼 뿐이며, 값에 대한 유효성 체크를 하지 않기 때문에 인덱스를 이용하여 접근 시 주의해야합니다.
 
-   ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221120224702942.png)
+   ![Untitled](/assets/img/posts/image-20221120224702942.png)
 
 이를 해결하기 위해서는 for_each과 같이 인덱스를 사용하여 접근하지 않는 방법을 사용해야 합니다.
 
@@ -218,7 +218,7 @@ output "all_users" {
 }
 ```
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221120224702943.png)
+![Untitled](/assets/img/posts/image-20221120224702943.png)
 
 위의 전체 Output에서 필요한 값만 반환시키고 싶다면 내장 함수 values와 splat 표현식을 사용합니다.
 
@@ -315,7 +315,7 @@ resource "aws_autoscaling_group" "web-asg" {
   }
   ```
 
-  ![- object 타입으로 반환하려면 key, value 형태를 사용해야한다.](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221120224702944.png)
+  ![- object 타입으로 반환하려면 key, value 형태를 사용해야한다.](/assets/img/posts/image-20221120224702944.png)
   _object 타입으로 반환하려면 key, value 형태를 사용해야한다._
 
   ```hcl
@@ -326,7 +326,7 @@ resource "aws_autoscaling_group" "web-asg" {
   }
   ```
 
-  ![list의 경우도 key, value 형태로 출력할 수 있다.](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221120224702945.png)
+  ![list의 경우도 key, value 형태로 출력할 수 있다.](/assets/img/posts/image-20221120224702945.png)
   _list의 경우도 key, value 형태로 출력할 수 있다._
 
 <br>
@@ -341,7 +341,7 @@ variable "user_names" {
 }
 ```
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221120224702946.png)
+![Untitled](/assets/img/posts/image-20221120224702946.png)
 
 <br>
 

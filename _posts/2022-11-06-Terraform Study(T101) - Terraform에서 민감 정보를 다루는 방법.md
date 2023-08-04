@@ -174,7 +174,7 @@ terraform apply -auto-approve
 
 <br>적용 후 코드나 별도의 파일에 민감한 정보를 하드코딩하지 않고 RDS에 접근할 수 있습니다.
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221106203703240.png)
+![Untitled](/assets/img/posts/image-20221106203703240.png)
 
 <br>
 
@@ -184,7 +184,7 @@ RDS를 구성하는데 사용되었던 정보들은 S3 backend 내 상태파일�
 
 S3에 저장되어있는  `tfstate` 파일을 직접 다운받아 확인해보면 AWS Secrets Manager로 민감한 정보를 암호화했음에도 모두 평문으로 저장되는 것을 확인할 수 있습니다.
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221106203703241.png)
+![Untitled](/assets/img/posts/image-20221106203703241.png)
 
 해당 원인은 Terraform의 특성 때문입니다. 구성을 마지막으로 적용한 이후 변경했는지 여부를 알 수 있도록 상태를 저장해야하는데 이 정보들이 암호화된다면 Terraform에서는 구성이 변경되는지 확인할 수 없습니다.
 

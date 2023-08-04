@@ -39,7 +39,7 @@ while true; do aws s3 ls --profile ljyoon; echo "------------------------------"
 
 - 별도 backend를 지정하지 않았으므로 작업 결과는 로컬에 있는 `terraform.tfstate` 파일에 저장됩니다.
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221020174519650.png)
+  ![Untitled](/assets/img/posts/image-20221020174519650.png)
 
   ```json
   # terraform.tfstate
@@ -153,7 +153,7 @@ while true; do aws s3 ls --profile ljyoon; echo "------------------------------"
   terraform import aws_s3_bucket.t101study jjikin-t101study-bucket-2
   ```
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221020174519651.png)
+  ![Untitled](/assets/img/posts/image-20221020174519651.png)
 
 <br>
 
@@ -163,7 +163,7 @@ while true; do aws s3 ls --profile ljyoon; echo "------------------------------"
 
   이후 `terraform apply` 시 관련 리소스의 중복 에러가 발생하며, import 시도해도 동일합니다.
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221020174519652.png)
+  ![Untitled](/assets/img/posts/image-20221020174519652.png)
 
   이 경우 import 하려는 리소스가 들어갈 공간을 만들어 줘야합니다. 아래와 같이 리소스 정의 부분에서 관련 내용들을 모두 삭제합니다.
 
@@ -186,15 +186,15 @@ while true; do aws s3 ls --profile ljyoon; echo "------------------------------"
 
   삭제 후 import 시 정상적으로 리소스 정보를 가져오는지 확인합니다.
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221020174519653.png)
+  ![Untitled](/assets/img/posts/image-20221020174519653.png)
 
   해당 케이스는 리소스 정보를 가져오지 못한 경우입니다.
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221020174519654.png)
+  ![Untitled](/assets/img/posts/image-20221020174519654.png)
 
 다시 `terraform apply` 시 리소스 정보를 가져온 것을 확인할 수 있습니다. 하지만 apply 과정에서 실제 리소스가 삭제 후 재생성될 가능성이 있으므로 주의해야합니다.
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221020174519655.png)
+![Untitled](/assets/img/posts/image-20221020174519655.png)
 
 <br>
 

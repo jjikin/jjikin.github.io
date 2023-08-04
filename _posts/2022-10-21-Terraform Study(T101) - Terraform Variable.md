@@ -283,7 +283,7 @@ terraform output public_ip
 
 - 실행 결과
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221021175043547.png)
+  ![Untitled](/assets/img/posts/image-20221021175043547.png)
 
 - 리소스 삭제
 

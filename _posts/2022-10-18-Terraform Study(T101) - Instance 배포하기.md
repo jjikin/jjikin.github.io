@@ -128,7 +128,7 @@ image:
 
 - 배포 결과
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221018164049500.png)
+  ![Untitled](/assets/img/posts/image-20221018164049500.png)
 
 <br>
 
@@ -198,7 +198,7 @@ image:
 
 - 배포 결과
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221018164049501.png)
+  ![Untitled](/assets/img/posts/image-20221018164049501.png)
 
 <br>
 
@@ -216,7 +216,7 @@ image:
 
 - 배포 결과
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221018164049502.png)
+  ![Untitled](/assets/img/posts/image-20221018164049502.png)
 
 <br>
 
@@ -282,7 +282,7 @@ image:
 
 - 배포 결과
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221018164049503.png)
+  ![Untitled](/assets/img/posts/image-20221018164049503.png)
 
 <br>
 
@@ -290,7 +290,7 @@ image:
 
 - 웹 서버 접속 테스트
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221018164049504.png)
+  ![Untitled](/assets/img/posts/image-20221018164049504.png)
 
   {: .prompt-warning }
 
@@ -356,7 +356,7 @@ image:
 
   > 기존 default VPC를 사용하지 않아 관련 리소스를 모두 삭제한 상태에서 default VPC만 재생성해서 발생한 문제였습니다.
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221018164049505.png)
+  ![Untitled](/assets/img/posts/image-20221018164049505.png)
 
 <br>
 
@@ -423,7 +423,7 @@ image:
 
 - 배포 결과
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221018164049506.png)
+  ![Untitled](/assets/img/posts/image-20221018164049506.png)
 
 <br>
 

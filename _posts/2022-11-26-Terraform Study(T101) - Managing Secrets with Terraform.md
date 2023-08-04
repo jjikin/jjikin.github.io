@@ -67,12 +67,12 @@ provider "aws" {
 
   - AWS가 주체가 되어 임시 보안자격증명 발급
   
-    ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221126230121620.png)
+    ![Untitled](/assets/img/posts/image-20221126230121620.png)
     _https://dev.classmethod.jp/articles/what-is-aws-iam-kr_
 
   - 외부 서비스(Github OIDC)가 주체가 되어 임시 보안자격증명 발급
   
-    ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221126230121621.png)
+    ![Untitled](/assets/img/posts/image-20221126230121621.png)
     _https://github.blog/2021-11-23-secure-deployments-openid-connect-github-actions-generally-available_
 
 <br>
@@ -194,7 +194,7 @@ Role(EC2FullAccess) Switch 를 통해, EC2를 사용할 수 있습니다.
 
 - 결과
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221126230121622.png)
+  ![Untitled](/assets/img/posts/image-20221126230121622.png)
 
   생성된 Instance 접속 후 별도의 Accesskey 정보가 없음에도 IAM Role 확인 및 describe vpc 시 정상적으로 정보를 가져올 수 있었습니다.
   
@@ -308,7 +308,7 @@ github actions에서 S3 접근을 위한 OIDC 사용 실습으로 대체
 
 - 결과
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221126230121623.png)
+  ![Untitled](/assets/img/posts/image-20221126230121623.png)
 
 <br>
 
@@ -418,10 +418,10 @@ AWS KMS 서비스를 통해 암호화 키를 생성하고 RDS 생성 시 활용 
   aws kms decrypt --ciphertext-blob fileb://secret.txt.encrypted --output text --query Plaintext --profile ljyoon | base64 --decode
   ```
 
-  ![KMS Key로 평문을 암호화한 결과](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221126230121624.png)
+  ![KMS Key로 평문을 암호화한 결과](/assets/img/posts/image-20221126230121624.png)
   _KMS Key로 평문을 암호화한 결과_
 
-  ![KMS Key로 암호문을 복호화한 결과](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221126230121625.png)
+  ![KMS Key로 암호문을 복호화한 결과](/assets/img/posts/image-20221126230121625.png)
   _KMS Key로 암호문을 복호화한 결과_
 
   <br>
@@ -602,7 +602,7 @@ AWS KMS 서비스를 통해 암호화 키를 생성하고 RDS 생성 시 활용 
 
 - 결과
 
-  ![MasterUsername 항목이 ‘admin’으로 생성된 것을 확인할 수 있으며 이는 암호화된 파일 정보로 RDS가 생성되었음을 의미합니다.](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221126230121626.png)
+  ![MasterUsername 항목이 ‘admin’으로 생성된 것을 확인할 수 있으며 이는 암호화된 파일 정보로 RDS가 생성되었음을 의미합니다.](/assets/img/posts/image-20221126230121626.png)
 
   MasterUsername 항목이 ‘admin’으로 생성된 것을 확인할 수 있으며 이는 암호화된 파일 정보로 RDS가 생성되었음을 의미합니다.
 

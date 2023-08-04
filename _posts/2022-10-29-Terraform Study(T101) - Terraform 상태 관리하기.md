@@ -48,7 +48,7 @@ Terraform은 인프라 구성에 대한 상태를 파일 형태로 저장해야 
 
 스터디에서는 AWS S3 + DynamoDB를 사용합니다.
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904170.png)
+![Untitled](/assets/img/posts/image-20221029193904170.png)
 _https://github.com/binbashar/terraform-aws-tfstate-backend_
 
 - S3 Bucket을 생성하는 코드 작성
@@ -162,15 +162,15 @@ _https://github.com/binbashar/terraform-aws-tfstate-backend_
 
 - 배포(dev 환경에 backend 적용) 및 확인
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904171.png)
+  ![Untitled](/assets/img/posts/image-20221029193904171.png)
 
-  ![`terraform.tfstate.backup` 파일이 생성됨](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904172.png)
+  ![`terraform.tfstate.backup` 파일이 생성됨](/assets/img/posts/image-20221029193904172.png)
   _`terraform.tfstate.backup` 파일이 생성됨_
 
-  ![S3 Bucket 내 tfstate 생성 확인](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904173.png)
+  ![S3 Bucket 내 tfstate 생성 확인](/assets/img/posts/image-20221029193904173.png)
   _S3 Bucket 내 tfstate 생성 확인_
 
-![dynamoDB 내 LockID 생성 확인](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904174.png)
+![dynamoDB 내 LockID 생성 확인](/assets/img/posts/image-20221029193904174.png)
   _dynamoDB 내 LockID 생성 확인_
 
 <br>
@@ -179,17 +179,17 @@ _https://github.com/binbashar/terraform-aws-tfstate-backend_
 
 - 테라폼의 backend 블록에는 변수나 참조를 사용 할 수 없음 → 아래 코드 사용할 수 없음
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904175.png)
+  ![Untitled](/assets/img/posts/image-20221029193904175.png)
 
 - 그 결과 S3 버킷 이름, 리전, DynamoDB 테이블 이름을 모두 테라폼 모듈에 수동으로 복사붙여녛어야 함, 심지어 **key** 값은 중복되면 안되며 고유하게 넣어야함
 
 - [**partial configuration**](https://developer.hashicorp.com/terraform/language/settings/backends/configuration#partial-configuration)을 통해 일부 매개 변수를 전달해서 사용 할 수 있음
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904176.png)
+  ![Untitled](/assets/img/posts/image-20221029193904176.png)
 
 - 다만, 이 경우에도 모듈마다 서로 다른 key 값을 설정해야 하기 때문에 key 매개 변수는 테라폼 코드에 있어야함
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904177.png)
+  ![Untitled](/assets/img/posts/image-20221029193904177.png)
 
 <br>
 
@@ -201,7 +201,7 @@ sed -i -e 's/HallsHolicker-jjang/gasida-jjangg/g' dev_ec2.tf
 terraform plan && terraform apply
 ```
 
-![잠금 상태 활성화와 함께 관련 Info를 json 형식으로 확인할 수 있다.](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904178.png)
+![잠금 상태 활성화와 함께 관련 Info를 json 형식으로 확인할 수 있다.](/assets/img/posts/image-20221029193904178.png)
 
 잠금 상태 활성화와 함께 관련 Info를 json 형식으로 확인할 수 있다.
 
@@ -217,7 +217,7 @@ terraform plan && terraform apply
 }
 ```
 
-![S3에서도 변경된 사항이 저장된 버전이 생성되었음을 확인할 수 있습니다.](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904179.png)
+![S3에서도 변경된 사항이 저장된 버전이 생성되었음을 확인할 수 있습니다.](/assets/img/posts/image-20221029193904179.png)
 
 S3에서도 변경된 사항이 저장된 버전이 생성되었음을 확인할 수 있습니다.
 
@@ -232,7 +232,7 @@ sed -i -e 's/gasida-jjangg/jjikin-jjangg/g' dev_ec2.tf
 terraform plan && terraform apply
 ```
 
-![Untitiled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904110.png)
+![Untitiled](/assets/img/posts/image-20221029193904110.png)
 _로컬에 있는 상태파일을 삭제했음에도 S3로부터 이전 태그(gasida-jjangg) 정보를 가져오는 것을 확인할 수 있습니다._
 
 <br>
@@ -250,10 +250,10 @@ _로컬에 있는 상태파일을 삭제했음에도 S3로부터 이전 태그(g
 
 - `terraform apply`  직후 다른 터미널에서 `terraform apply`  시도
 
-  ![기존 터미널에서 stg 환경을 생성 중이므로, 잠금 상태에서는 apply가 불가능합니다.](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904111.png)
+  ![기존 터미널에서 stg 환경을 생성 중이므로, 잠금 상태에서는 apply가 불가능합니다.](/assets/img/posts/image-20221029193904111.png)
   _기존 터미널에서 stg 환경을 생성 중이므로, 잠금 상태에서는 apply가 불가능합니다._
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904112.png)
+  ![Untitled](/assets/img/posts/image-20221029193904112.png)
   _ 또한, 여러 환경을 구성하여 사용하더라도 Key(LockID)가 구분되어 생성되므로 각 환경에 대한 격리가 가능합니다._
 
 <br>
@@ -263,11 +263,11 @@ _로컬에 있는 상태파일을 삭제했음에도 S3로부터 이전 태그(g
 - backend 블록에는 변수나 참조를 사용 할 수 없습니다.
   = backend 관련 리소스 이름을 모두 코드에 수동으로 입력해야 하며 key 값은 중복되지 않아야 합니다.
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904113.png)
+  ![Untitled](/assets/img/posts/image-20221029193904113.png)
 
 - **partial configuration**을 통해 리소스 이름은 일부 매개 변수를 전달해서 사용 할 수 있지만, key 값의 경우각 환경별로 중복되지 않아야 하므로 수동 입력이 필요합니다.
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221029193904176.png)
+![Untitled](/assets/img/posts/image-20221029193904176.png)
 
 <br>
 

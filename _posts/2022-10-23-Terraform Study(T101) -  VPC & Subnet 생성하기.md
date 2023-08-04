@@ -274,7 +274,7 @@ image:
   	...
   ```
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221023175356605.png)
+  ![Untitled](/assets/img/posts/image-20221023175356605.png)
 
 - Instance 삭제
 

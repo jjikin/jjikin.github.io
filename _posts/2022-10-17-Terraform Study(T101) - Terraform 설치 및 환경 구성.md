@@ -80,7 +80,7 @@ image:
 
 Terraform은 API(응용 프로그래밍 인터페이스)를 통해 클라우드 플랫폼 및 기타 서비스에서 리소스를 생성하고 관리합니다.
 
-![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221017163033190.png)
+![Untitled](/assets/img/posts/image-20221017163033190.png)
 _https://developer.hashicorp.com/terraform/tutorials/aws-get-started/infrastructure-as-code?in=terraform%2Faws-get-started_
 
 
@@ -135,11 +135,11 @@ brew install tree jq watch
 
 - pager 활성화
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221017163033191.png)
+  ![Untitled](/assets/img/posts/image-20221017163033191.png)
 
 - pager 비활성화
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221017163033192.png)
+  ![Untitled](/assets/img/posts/image-20221017163033192.png)
 
 <br>참고
 

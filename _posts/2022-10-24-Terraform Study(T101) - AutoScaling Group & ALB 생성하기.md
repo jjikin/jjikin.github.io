@@ -94,7 +94,7 @@ AutoScalingGroup을 구성하는 방법에는 2가지가 있습니다.
 
   - Error #1 : `plan` 에서는 문제가 없었으나 `apply` 시 아래 에러가 발생했습니다.
 
-    ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221024180254450.png)
+    ![Untitled](/assets/img/posts/image-20221024180254450.png)
 
     일반적인 Instance와 시작 템플릿 간 유저 데이터 처리하는 방식이 달라 발생하는 것으로 보여, 별도의 파일로 분할 후 테라폼에서 제공하는 `filebase64` 함수를 사용하여 해결했습니다.
 
@@ -140,11 +140,11 @@ AutoScalingGroup을 구성하는 방법에는 2가지가 있습니다.
 
     배포는 문제없이 완료되었고, 아래와 같이 시작 템플릿 버전이 변경되었습니다.
 
-    ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221024180254451.png)
+    ![Untitled](/assets/img/posts/image-20221024180254451.png)
 
     기존 생성되었던 인스턴스의 버전 업데이트를 위해 인스턴스 새로고침을 시도하였으나 아래와 같이 에러가 발생했습니다.
 
-    ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221024180254452.png)
+    ![Untitled](/assets/img/posts/image-20221024180254452.png)
 
     시작 템플릿에 네트워크 인터페이스 블록을 사용하여 정의하게되면, 보안그룹도 해당 블록으로 넣어주어야 했습니다. 아래와 같이 코드 변경 후 해결되었습니다.
 
@@ -162,17 +162,17 @@ AutoScalingGroup을 구성하는 방법에는 2가지가 있습니다.
     }            
     ```
 
-    ![1대씩 최신 버전으로 교체 진행](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221024180254453.png)
+    ![1대씩 최신 버전으로 교체 진행](/assets/img/posts/image-20221024180254453.png)
 
     1대씩 최신 버전으로 교체 진행
 
-    ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221024180254454.png)
+    ![Untitled](/assets/img/posts/image-20221024180254454.png)
 
-    ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221024180254455.png)
+    ![Untitled](/assets/img/posts/image-20221024180254455.png)
 
 - 테스트
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221024180254456.png)
+  ![Untitled](/assets/img/posts/image-20221024180254456.png)
 
 - ASG 구성 확인
 
@@ -275,7 +275,7 @@ ALB 구성을 위해서는 Listener, Listener rule, Target group 정의가 필�
   	web-alb_dns = "web-alb-852605745.ap-northeast-2.elb.amazonaws.com"
   ```
 
-  ![Untitled](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221024180254457.png)
+  ![Untitled](/assets/img/posts/image-20221024180254457.png)
 
 <br>
 
@@ -324,11 +324,11 @@ ALB의 Targetgroup을 ASG에 연결하고, Healthcheck 설정을 ELB로 변경�
   web-alb_dns = "web-alb-852605745.ap-northeast-2.elb.amazonaws.com"
   ```
 
-  ![ALB DNS를 통해 테스트 시 로드밸런싱을 통해 ASG내 인스턴스가 균등하게 응답했음을 확인할 수 있습니다.](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221024180254458.png)
+  ![ALB DNS를 통해 테스트 시 로드밸런싱을 통해 ASG내 인스턴스가 균등하게 응답했음을 확인할 수 있습니다.](/assets/img/posts/image-20221024180254458.png)
 
   ALB DNS를 통해 테스트 시 로드밸런싱을 통해 ASG내 인스턴스가 균등하게 응답했음을 확인할 수 있습니다.
 
-  ![타겟그룹에 ASG가 등록되었습니다.](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20221024180254459.png)
+  ![타겟그룹에 ASG가 등록되었습니다.](/assets/img/posts/image-20221024180254459.png)
 
   타겟그룹에 ASG가 등록되었습니다.
 

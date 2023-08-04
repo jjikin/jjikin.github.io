@@ -19,7 +19,7 @@ Terraform GitOps Workflow
 
 구성할 GitOps 환경의 Workflow를 그려보았습니다.
 
-![image-20230722191219137](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230722191219137.png)
+![image-20230722191219137](/assets/img/posts/image-20230722191219137.png)
 
 <br>
 
@@ -317,7 +317,7 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
    ```
    <br>
 7. 생성한 도메인 주소와 계정 정보로 Atlantis Web에 접속합니다.
-    ![image-20230722144951759](/Users/mzc01-ljyoon/Documents/blog/jjikin.github.io/assets/img/posts/image-20230722144951759.png)
+    ![image-20230722144951759](/assets/img/posts/image-20230722144951759.png)
 
 
    <br>
