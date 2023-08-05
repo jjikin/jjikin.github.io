@@ -67,7 +67,7 @@ image:
 ## Local Values
 
 모듈 내에서 사용할 수 있는 값으로 locals block을 통해 선언할 수 있으며, 동일한 값을 여러 번 사용하거나 값에 이름을 부여하여 관리하고 싶을 때 사용합니다.  
-block 안에 다양한 type의 variables를 선언할 수 있으며 코드 내에서 local.<이름>으로 참조할 수 있습니다.
+block 안에 다양한 type의 variables를 선언할 수 있으며 코드 내에서 local.`<`이름`>`으로 참조할 수 있습니다.
 
 ```hcl
 # iamuser.tf
