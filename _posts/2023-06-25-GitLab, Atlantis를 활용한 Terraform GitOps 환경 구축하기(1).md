@@ -256,7 +256,7 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
 4. Atlantis 파드가 Terraform Code를 통해 Plan/Apply하기 위해서는 IRSA가 필요합니다.  
    하지만 `terraform-aws-modules-iam` 모듈에서 지원하지 않으므로 직접 Role을 생성하도록 추가해야 합니다.
 
-   ```yaml
+   ```hcl
    # main.tf
    ...
    locals {
@@ -270,7 +270,7 @@ Atlantis는 EKS 내 helm chart를 통해 배포할 예정이며, [Atlantis Docs]
    }
    ```
 
-   ```yaml
+   ```hcl
    # eks.tf
    ...
    resource "aws_iam_role" "atlantis-irsa_role" {

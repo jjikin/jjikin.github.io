@@ -543,7 +543,7 @@ Terraform에서는 상태를 구분하여 저장할 수 있는 작업 공간을 
 
   모든 output(출력 변수) 값은 상태 파일에 저장되므로 아래 방법으로 참조가 가능합니다.
 
-  > data.terraform_remote_state.<`tfstate` 이름>.outputs.<출력 변수 이름>
+  > data.terraform_remote_state.`<tfstate 이름>`.outputs.`<출력 변수 이름>`
 
   <br>
 
